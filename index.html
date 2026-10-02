@@ -1,393 +1,1188 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learn Kanji Pro</title>
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f8fafc;
-            --text-sub: #94a3b8;
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --accent: #10b981;
-            --border: #334155;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6d5dfc">
+<meta name="description" content="Kotoba - Japanese Kanji and Vocabulary Learning App">
+<title>Kotoba — Japanese Learning</title>
 
-        .light-mode {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #0f172a;
-            --text-sub: #64748b;
-            --border: #e2e8f0;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            padding-bottom: 60px;
-            transition: background-color 0.3s;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        h1 {
-            font-size: 1.2rem;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .btn-theme {
-            background: none;
-            border: 1px solid var(--border);
-            color: var(--text-color);
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            background: var(--card-bg);
-            padding: 0.3rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 0.6rem;
-            border: none;
-            background: none;
-            color: var(--text-sub);
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .tab-btn.active {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .search-box {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--card-bg);
-            color: var(--text-color);
-            margin-bottom: 1rem;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .kanji-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 1rem;
-        }
-
-        .kanji-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.2rem;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
-
-        .kanji-card:active {
-            transform: scale(0.98);
-        }
-
-        .fav-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--text-sub);
-        }
-
-        .fav-btn.active {
-            color: #f59e0b;
-        }
-
-        .kanji-symbol {
-            font-size: 3.5rem;
-            font-weight: bold;
-            color: var(--text-color);
-            margin: 0.3rem 0;
-        }
-
-        .meaning {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .readings {
-            font-size: 0.8rem;
-            color: var(--text-sub);
-            margin-top: 0.4rem;
-        }
-
-        .audio-btn {
-            margin-top: 0.6rem;
-            background: var(--border);
-            border: none;
-            color: var(--text-color);
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        /* Quiz Styles */
-        .quiz-container {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .quiz-kanji {
-            font-size: 5rem;
-            margin: 1rem 0;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
-
-        .opt-btn {
-            background: var(--bg-color);
-            border: 1px solid var(--border);
-            color: var(--text-color);
-            padding: 0.8rem;
-            border-radius: 10px;
-            font-size: 1rem;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .opt-btn.correct { background: #059669; color: white; }
-        .opt-btn.wrong { background: #dc2626; color: white; }
-
-        .hidden { display: none; }
-    </style>
+<style>
+:root{
+  --bg:#f6f7fb;
+  --card:#fff;
+  --text:#171822;
+  --muted:#737684;
+  --primary:#6d5dfc;
+  --primary2:#877bff;
+  --border:#e7e7ef;
+  --good:#18a56b;
+  --danger:#e05252;
+  --shadow:0 8px 30px rgba(30,30,60,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{max-width:1100px;margin:auto;padding-bottom:90px}
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(246,247,251,.92);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid var(--border);
+}
+.header-inner{
+  max-width:1100px;
+  margin:auto;
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+}
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+  font-size:20px;
+}
+.logo-icon{
+  width:38px;height:38px;
+  display:grid;place-items:center;
+  color:white;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  border-radius:12px;
+  font-size:22px;
+}
+.icon-btn{
+  width:42px;height:42px;
+  border:1px solid var(--border);
+  background:var(--card);
+  border-radius:12px;
+}
+main{padding:22px 16px}
+.page{display:none}
+.page.active{display:block}
+.hero{
+  padding:25px;
+  border-radius:25px;
+  color:#fff;
+  background:linear-gradient(135deg,#6252f4,#9187ff);
+  box-shadow:var(--shadow);
+}
+.hero h1{margin:0 0 7px;font-size:30px}
+.hero p{margin:0;opacity:.9}
+.hero-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn{
+  border:0;
+  border-radius:13px;
+  padding:12px 17px;
+  font-weight:700;
+}
+.btn.primary{background:#fff;color:#5d50e9}
+.btn.dark{background:#201b52;color:#fff}
+.btn.outline{
+  background:transparent;
+  border:1px solid var(--border);
+}
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:28px 2px 13px;
+}
+.section-title h2{font-size:19px;margin:0}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:17px;
+  box-shadow:var(--shadow);
+}
+.stat{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.stat strong{font-size:25px}
+.stat span{font-size:13px;color:var(--muted)}
+.level-card{
+  min-height:120px;
+  position:relative;
+  overflow:hidden;
+}
+.level{
+  font-size:25px;
+  font-weight:900;
+}
+.level-card p{margin:5px 0;color:var(--muted);font-size:13px}
+.progress{
+  height:7px;
+  border-radius:10px;
+  background:#ededf4;
+  overflow:hidden;
+  margin-top:12px;
+}
+.progress i{
+  display:block;height:100%;
+  background:var(--primary);
+  width:0;
+}
+.searchbox{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
+}
+.searchbox input{
+  flex:1;
+  border:1px solid var(--border);
+  background:var(--card);
+  border-radius:14px;
+  padding:14px;
+  outline:none;
+}
+.searchbox button{
+  width:50px;
+  border:0;
+  border-radius:14px;
+  background:var(--primary);
+  color:white;
+}
+.kanji-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.kanji-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:15px 8px;
+  text-align:center;
+  cursor:pointer;
+}
+.kanji-char{
+  font-family:"Noto Serif JP","Yu Mincho",serif;
+  font-size:42px;
+}
+.kanji-meaning{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:5px;
+}
+.badge{
+  display:inline-block;
+  margin-top:7px;
+  padding:4px 8px;
+  border-radius:8px;
+  background:#efedff;
+  color:#6254ee;
+  font-size:11px;
+  font-weight:700;
+}
+.empty{
+  padding:35px 10px;
+  text-align:center;
+  color:var(--muted);
+}
+.flashcard{
+  min-height:370px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+.flash-kanji{
+  font-family:"Noto Serif JP","Yu Mincho",serif;
+  font-size:100px;
+}
+.flash-reading{font-size:24px;color:var(--primary);margin:5px}
+.flash-meaning{color:var(--muted)}
+.review-buttons{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-top:18px;
+}
+.review-buttons button{
+  padding:12px 4px;
+  border:0;
+  border-radius:12px;
+  font-weight:700;
+}
+.again{background:#ffe8e8;color:#c63e3e}
+.hard{background:#fff0dc;color:#b86a00}
+.good{background:#e5f8ef;color:#138254}
+.easy{background:#e8e8ff;color:#574bd2}
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:none;
+  background:rgba(0,0,0,.5);
+  padding:20px;
+  overflow:auto;
+}
+.modal.show{display:flex;align-items:center;justify-content:center}
+.modal-box{
+  width:min(650px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:var(--card);
+  border-radius:25px;
+  padding:22px;
+}
+.modal-top{
+  display:flex;
+  justify-content:space-between;
+}
+.close{
+  border:0;
+  background:#eeeef5;
+  border-radius:10px;
+  width:38px;height:38px;
+}
+.detail-char{
+  text-align:center;
+  font-size:110px;
+  font-family:"Noto Serif JP","Yu Mincho",serif;
+}
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.info{
+  background:#f7f7fb;
+  padding:13px;
+  border-radius:13px;
+}
+.info small{display:block;color:var(--muted)}
+.example{
+  border-left:3px solid var(--primary);
+  padding:10px 12px;
+  margin:10px 0;
+  background:#fafaff;
+  border-radius:8px;
+}
+canvas{
+  width:100%;
+  height:320px;
+  background:#fff;
+  border:2px dashed #d9d9e5;
+  border-radius:18px;
+  touch-action:none;
+}
+.bottom-nav{
+  position:fixed;
+  z-index:30;
+  left:50%;
+  bottom:10px;
+  transform:translateX(-50%);
+  width:min(700px,calc(100% - 20px));
+  background:rgba(255,255,255,.95);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  border-radius:20px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  padding:7px;
+}
+.nav-btn{
+  border:0;
+  background:transparent;
+  padding:9px 3px;
+  border-radius:13px;
+  font-size:11px;
+  color:var(--muted);
+}
+.nav-btn.active{
+  background:#efedff;
+  color:var(--primary);
+  font-weight:800;
+}
+.toast{
+  position:fixed;
+  z-index:100;
+  bottom:85px;
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:#20212b;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+.dark{
+  --bg:#111217;
+  --card:#191a21;
+  --text:#f3f3f7;
+  --muted:#a4a5b0;
+  --border:#2a2b34;
+}
+.dark header{background:rgba(17,18,23,.9)}
+.dark .progress{background:#292a32}
+.dark .info,.dark .example{background:#20212a}
+.dark .bottom-nav{background:rgba(25,26,33,.96)}
+@media(min-width:700px){
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .kanji-grid{grid-template-columns:repeat(6,1fr)}
+}
+</style>
 </head>
+
 <body>
 
-    <header>
-        <h1>🇯🇵 Kanji Pro</h1>
-        <button class="btn-theme" onclick="toggleTheme()">🌓 Theme</button>
-    </header>
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">言</div>
+      <span>Kotoba</span>
+    </div>
+    <button class="icon-btn" onclick="toggleDark()">🌙</button>
+  </div>
+</header>
 
-    <div class="container">
-        <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('list')">Cards</button>
-            <button class="tab-btn" onclick="switchTab('quiz')">Quiz Mode</button>
-            <button class="tab-btn" onclick="switchTab('favs')">Saved ⭐</button>
-        </div>
+<div class="app">
+<main>
 
-        <!-- SEARCH TAB -->
-        <div id="list-view">
-            <input type="text" class="search-box" id="searchInput" placeholder="Search Kanji, Meaning, Romaji..." oninput="filterKanji()">
-            <div class="kanji-grid" id="kanjiGrid"></div>
-        </div>
+<!-- HOME -->
+<section id="home" class="page active">
 
-        <!-- QUIZ TAB -->
-        <div id="quiz-view" class="hidden">
-            <div class="quiz-container">
-                <h3>Guess the Meaning!</h3>
-                <div class="quiz-kanji" id="quizKanji">日</div>
-                <div class="options-grid" id="optionsGrid"></div>
-                <p id="quizScore" style="margin-top:1rem; color:var(--text-sub)">Score: 0</p>
-            </div>
-        </div>
+  <div class="hero">
+    <h1>Learn Japanese smarter 🇯🇵</h1>
+    <p>Kanji, vocabulary, readings and daily review — all in one place.</p>
+    <div class="hero-actions">
+      <button class="btn primary" onclick="showPage('review')">Start Review</button>
+      <button class="btn dark" onclick="showPage('kanji')">Explore Kanji</button>
+    </div>
+  </div>
 
-        <!-- FAVS TAB -->
-        <div id="fav-view" class="hidden">
-            <div class="kanji-grid" id="favGrid"></div>
-        </div>
+  <div class="section-title">
+    <h2>Your Progress</h2>
+  </div>
+
+  <div class="grid">
+    <div class="card stat">
+      <div><strong id="streak">0</strong><br><span>Day streak</span></div>
+      <span>🔥</span>
+    </div>
+    <div class="card stat">
+      <div><strong id="studied">0</strong><br><span>Studied</span></div>
+      <span>📚</span>
+    </div>
+    <div class="card stat">
+      <div><strong id="mastered">0</strong><br><span>Mastered</span></div>
+      <span>⭐</span>
+    </div>
+    <div class="card stat">
+      <div><strong id="reviews">0</strong><br><span>Reviews</span></div>
+      <span>🔁</span>
+    </div>
+  </div>
+
+  <div class="section-title"><h2>JLPT Levels</h2></div>
+
+  <div class="grid" id="levels"></div>
+
+</section>
+
+<!-- KANJI -->
+<section id="kanji" class="page">
+
+  <div class="section-title">
+    <h2>Kanji Dictionary</h2>
+  </div>
+
+  <div class="searchbox">
+    <input id="kanjiSearch"
+           placeholder="Search kanji, meaning or reading..."
+           oninput="searchKanji()">
+    <button onclick="searchKanji()">⌕</button>
+  </div>
+
+  <div class="grid" style="margin-bottom:15px">
+    <button class="btn outline" onclick="filterLevel('ALL')">All</button>
+    <button class="btn outline" onclick="filterLevel('N5')">N5</button>
+    <button class="btn outline" onclick="filterLevel('N4')">N4</button>
+    <button class="btn outline" onclick="filterLevel('N3')">N3</button>
+    <button class="btn outline" onclick="filterLevel('N2')">N2</button>
+    <button class="btn outline" onclick="filterLevel('N1')">N1</button>
+  </div>
+
+  <div id="kanjiGrid" class="kanji-grid"></div>
+
+</section>
+
+<!-- REVIEW -->
+<section id="review" class="page">
+
+  <div class="section-title">
+    <h2>Flashcard Review</h2>
+    <span id="reviewCount"></span>
+  </div>
+
+  <div class="card flashcard" id="flashcard"></div>
+
+  <div class="review-buttons">
+    <button class="again" onclick="rateCard('again')">Again</button>
+    <button class="hard" onclick="rateCard('hard')">Hard</button>
+    <button class="good" onclick="rateCard('good')">Good</button>
+    <button class="easy" onclick="rateCard('easy')">Easy</button>
+  </div>
+
+</section>
+
+<!-- WRITING -->
+<section id="writing" class="page">
+
+  <div class="section-title">
+    <h2>Writing Practice</h2>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:13px;color:var(--muted)">Practice</div>
+        <div id="writingChar" style="font-size:50px;font-family:serif">日</div>
+      </div>
+      <button class="btn outline" onclick="speakWriting()">🔊</button>
     </div>
 
-    <script>
-        const kanjiData = [
-            { kanji: "日", meaning: "Sun / Day", bn: "সূর্য / দিন", onyomi: "NICHI, JITSU", kunyomi: "hi, bi", romaji: "hi" },
-            { kanji: "月", meaning: "Moon / Month", bn: "চাঁদ / মাস", onyomi: "GETSU, GATSU", kunyomi: "tsuki", romaji: "tsuki" },
-            { kanji: "火", meaning: "Fire", bn: "আগুন", onyomi: "KA", kunyomi: "hi", romaji: "hi" },
-            { kanji: "水", meaning: "Water", bn: "পানি", onyomi: "SUI", kunyomi: "mizu", romaji: "mizu" },
-            { kanji: "木", meaning: "Tree / Wood", bn: "গাছ / কাঠ", onyomi: "MOKU, BOKU", kunyomi: "ki", romaji: "ki" },
-            { kanji: "金", meaning: "Gold / Money", bn: "সোনা / টাকা", onyomi: "KIN", kunyomi: "kane", romaji: "kane" },
-            { kanji: "土", meaning: "Soil / Earth", bn: "মাটি", onyomi: "TO, DO", kunyomi: "tsuchi", romaji: "tsuchi" },
-            { kanji: "山", meaning: "Mountain", bn: "পাহাড়", onyomi: "SAN", kunyomi: "yama", romaji: "yama" },
-            { kanji: "川", meaning: "River", bn: "নদী", onyomi: "SEN", kunyomi: "kawa", romaji: "kawa" },
-            { kanji: "人", meaning: "Person", bn: "মানুষ", onyomi: "JIN, NIN", kunyomi: "hito", romaji: "hito" }
-        ];
+    <canvas id="canvas"></canvas>
 
-        let favorites = JSON.parse(localStorage.getItem('kanji_favs')) || [];
-        let quizScore = 0;
-        let currentQuizItem = null;
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn outline" onclick="clearCanvas()">Clear</button>
+      <button class="btn primary" onclick="showGuide()">Show Guide</button>
+      <button class="btn dark" onclick="nextWriting()">Next</button>
+    </div>
+  </div>
 
-        function renderKanji(items, containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = "";
-            
-            if(items.length === 0) {
-                container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:var(--text-sub)">No Kanji found!</p>`;
-                return;
-            }
+</section>
 
-            items.forEach(item => {
-                const isFav = favorites.includes(item.kanji);
-                const card = document.createElement('div');
-                card.className = 'kanji-card';
-                card.innerHTML = `
-                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${item.kanji}')">★</button>
-                    <div class="kanji-symbol">${item.kanji}</div>
-                    <div class="meaning">${item.bn}</div>
-                    <div style="font-size:0.8rem; color:var(--text-sub);">${item.meaning}</div>
-                    <div class="readings">On: ${item.onyomi}<br>Kun: ${item.kunyomi}</div>
-                    <button class="audio-btn" onclick="speakKanji('${item.kanji}')">🔊 Voice</button>
-                `;
-                container.appendChild(card);
-            });
-        }
+<!-- PROGRESS -->
+<section id="progress" class="page">
 
-        function speakKanji(text) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ja-JP';
-            window.speechSynthesis.speak(utterance);
-        }
+  <div class="section-title"><h2>My Progress</h2></div>
 
-        function toggleFav(kanji) {
-            if (favorites.includes(kanji)) {
-                favorites = favorites.filter(k => k !== kanji);
-            } else {
-                favorites.push(kanji);
-            }
-            localStorage.setItem('kanji_favs', JSON.stringify(favorites));
-            renderKanji(kanjiData, 'kanjiGrid');
-            renderFavs();
-        }
+  <div class="card">
+    <h3>Overall progress</h3>
+    <div class="progress"><i id="overallBar"></i></div>
+    <p id="overallText" style="color:var(--muted)">0%</p>
+  </div>
 
-        function renderFavs() {
-            const favItems = kanjiData.filter(item => favorites.includes(item.kanji));
-            renderKanji(favItems, 'favGrid');
-        }
+  <div class="section-title"><h2>JLPT Progress</h2></div>
+  <div id="progressLevels"></div>
 
-        function filterKanji() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = kanjiData.filter(item => 
-                item.kanji.includes(query) || 
-                item.meaning.toLowerCase().includes(query) ||
-                item.bn.includes(query) ||
-                item.romaji.toLowerCase().includes(query)
-            );
-            renderKanji(filtered, 'kanjiGrid');
-        }
+  <div class="card" style="margin-top:15px">
+    <button class="btn outline" onclick="resetProgress()">Reset all progress</button>
+  </div>
 
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+</section>
 
-            document.getElementById('list-view').classList.add('hidden');
-            document.getElementById('quiz-view').classList.add('hidden');
-            document.getElementById('fav-view').classList.add('hidden');
+</main>
+</div>
 
-            if (tab === 'list') document.getElementById('list-view').classList.remove('hidden');
-            if (tab === 'quiz') {
-                document.getElementById('quiz-view').classList.remove('hidden');
-                nextQuizQuestion();
-            }
-            if (tab === 'favs') {
-                document.getElementById('fav-view').classList.remove('hidden');
-                renderFavs();
-            }
-        }
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="showPage('home',this)">🏠<br>Home</button>
+  <button class="nav-btn" onclick="showPage('kanji',this)">字<br>Kanji</button>
+  <button class="nav-btn" onclick="showPage('review',this)">🧠<br>Review</button>
+  <button class="nav-btn" onclick="showPage('writing',this)">✍️<br>Writing</button>
+  <button class="nav-btn" onclick="showPage('progress',this)">📊<br>Progress</button>
+</nav>
 
-        function toggleTheme() {
-            document.body.classList.toggle('light-mode');
-        }
+<div id="modal" class="modal" onclick="closeModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-top">
+      <b>Kanji Details</b>
+      <button class="close" onclick="hideModal()">×</button>
+    </div>
+    <div id="modalContent"></div>
+  </div>
+</div>
 
-        // Quiz Logic
-        function nextQuizQuestion() {
-            currentQuizItem = kanjiData[Math.floor(Math.random() * kanjiData.length)];
-            document.getElementById('quizKanji').innerText = currentQuizItem.kanji;
+<div id="toast" class="toast"></div>
 
-            let options = [currentQuizItem];
-            while (options.length < 4) {
-                let randomItem = kanjiData[Math.floor(Math.random() * kanjiData.length)];
-                if (!options.includes(randomItem)) options.push(randomItem);
-            }
-            options.sort(() => Math.random() - 0.5);
+<script>
 
-            const grid = document.getElementById('optionsGrid');
-            grid.innerHTML = '';
-            options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'opt-btn';
-                btn.innerText = opt.bn;
-                btn.onclick = () => checkAnswer(opt, btn);
-                grid.appendChild(btn);
-            });
-        }
+/* =========================================================
+   KOTOBA DATA
+   The app can load large JSON datasets from /data/.
+   ========================================================= */
 
-        function checkAnswer(selected, btn) {
-            if (selected.kanji === currentQuizItem.kanji) {
-                btn.classList.add('correct');
-                quizScore += 10;
-                speakKanji(currentQuizItem.kanji);
-            } else {
-                btn.classList.add('wrong');
-            }
-            document.getElementById('quizScore').innerText = `Score: ${quizScore}`;
-                setTimeout(nextQuizQuestion, 1000);
-        }
+const SAMPLE_KANJI = [
+ {k:"日",m:"day / sun",on:"ニチ・ジツ",kun:"ひ・か",l:"N5",s:4},
+ {k:"月",m:"month / moon",on:"ゲツ・ガツ",kun:"つき",l:"N5",s:4},
+ {k:"火",m:"fire",on:"カ",kun:"ひ・ほ",l:"N5",s:4},
+ {k:"水",m:"water",on:"スイ",kun:"みず",l:"N5",s:4},
+ {k:"木",m:"tree / wood",on:"モク・ボク",kun:"き・こ",l:"N5",s:4},
+ {k:"金",m:"gold / money",on:"キン・コン",kun:"かね",l:"N5",s:8},
+ {k:"土",m:"earth / soil",on:"ド・ト",kun:"つち",l:"N5",s:3},
+ {k:"人",m:"person",on:"ジン・ニン",kun:"ひと",l:"N5",s:2},
+ {k:"大",m:"big / large",on:"ダイ・タイ",kun:"おお",l:"N5",s:3},
+ {k:"小",m:"small",on:"ショウ",kun:"ちい・こ・お",l:"N5",s:3},
+ {k:"中",m:"middle / inside",on:"チュウ",kun:"なか",l:"N5",s:4},
+ {k:"上",m:"up / above",on:"ジョウ",kun:"うえ・あ",l:"N5",s:3},
+ {k:"下",m:"down / below",on:"カ・ゲ",kun:"した・さ・くだ",l:"N5",s:3},
+ {k:"山",m:"mountain",on:"サン",kun:"やま",l:"N5",s:3},
+ {k:"川",m:"river",on:"セン",kun:"かわ",l:"N5",s:3},
+ {k:"学",m:"study / learning",on:"ガク",kun:"まな",l:"N5",s:8},
+ {k:"生",m:"life / birth",on:"セイ・ショウ",kun:"い・う・なま",l:"N5",s:5},
+ {k:"先",m:"before / ahead",on:"セン",kun:"さき",l:"N5",s:6},
+ {k:"行",m:"go / conduct",on:"コウ・ギョウ",kun:"い・おこな",l:"N5",s:6},
+ {k:"来",m:"come / next",on:"ライ",kun:"く・き・こ",l:"N5",s:7},
+ {k:"見",m:"see / look",on:"ケン",kun:"み",l:"N5",s:7},
+ {k:"食",m:"eat / food",on:"ショク",kun:"た・く",l:"N5",s:9},
+ {k:"飲",m:"drink",on:"イン",kun:"の",l:"N5",s:12},
+ {k:"話",m:"talk / story",on:"ワ",kun:"はな・はなし",l:"N5",s:13},
+ {k:"読",m:"read",on:"ドク",kun:"よ",l:"N5",s:14},
+ {k:"書",m:"write",on:"ショ",kun:"か",l:"N5",s:10},
+ {k:"聞",m:"hear / ask",on:"ブン・モン",kun:"き・き",l:"N5",s:14},
+ {k:"語",m:"language / word",on:"ゴ",kun:"かた",l:"N5",s:14},
+ {k:"電",m:"electricity",on:"デン",kun:"",l:"N5",s:13},
+ {k:"車",m:"car / vehicle",on:"シャ",kun:"くるま",l:"N5",s:7},
+ {k:"校",m:"school",on:"コウ",kun:"",l:"N5",s:10},
+ {k:"友",m:"friend",on:"ユウ",kun:"とも",l:"N5",s:4},
+ {k:"名",m:"name",on:"メイ・ミョウ",kun:"な",l:"N5",s:6},
+ {k:"年",m:"year",on:"ネン",kun:"とし",l:"N5",s:6},
+ {k:"時",m:"time / hour",on:"ジ",kun:"とき",l:"N5",s:10},
+ {k:"間",m:"interval / between",on:"カン・ケン",kun:"あいだ・ま",l:"N5",s:12},
+ {k:"毎",m:"every",on:"マイ",kun:"",l:"N5",s:6},
+ {k:"何",m:"what",on:"カ",kun:"なに・なん",l:"N5",s:7},
+ {k:"今",m:"now",on:"コン・キン",kun:"いま",l:"N5",s:4},
+ {k:"週",m:"week",on:"シュウ",kun:"",l:"N5",s:11},
+ {k:"白",m:"white",on:"ハク・ビャク",kun:"しろ・しら",l:"N5",s:5},
+ {k:"赤",m:"red",on:"セキ・シャク",kun:"あか",l:"N5",s:7},
+ {k:"青",m:"blue",on:"セイ・ショウ",kun:"あお",l:"N5",s:8},
+ {k:"空",m:"sky / empty",on:"クウ",kun:"そら・あ",l:"N5",s:8},
+ {k:"天",m:"heaven / sky",on:"テン",kun:"あめ・あま",l:"N5",s:4},
+ {k:"気",m:"spirit / energy",on:"キ・ケ",kun:"",l:"N5",s:6},
+ {k:"雨",m:"rain",on:"ウ",kun:"あめ・あま",l:"N5",s:8},
+ {k:"花",m:"flower",on:"カ",kun:"はな",l:"N5",s:7},
+ {k:"犬",m:"dog",on:"ケン",kun:"いぬ",l:"N5",s:4},
+ {k:"猫",m:"cat",on:"ビョウ",kun:"ねこ",l:"N5",s:11},
+ {k:"魚",m:"fish",on:"ギョ",kun:"さかな・うお",l:"N5",s:11},
+ {k:"鳥",m:"bird",on:"チョウ",kun:"とり",l:"N5",s:11},
+ {k:"本",m:"book / origin",on:"ホン",kun:"もと",l:"N5",s:5},
+ {k:"円",m:"yen / circle",on:"エン",kun:"まる",l:"N5",s:4},
+ {k:"入",m:"enter",on:"ニュウ",kun:"い・はい",l:"N5",s:2},
+ {k:"出",m:"exit / leave",on:"シュツ",kun:"で・だ",l:"N5",s:5},
+ {k:"休",m:"rest",on:"キュウ",kun:"やす",l:"N5",s:6},
+ {k:"長",m:"long / leader",on:"チョウ",kun:"なが",l:"N5",s:8},
+ {k:"高",m:"high / expensive",on:"コウ",kun:"たか",l:"N5",s:10},
+ {k:"安",m:"cheap / safe",on:"アン",kun:"やす",l:"N5",s:6},
+ {k:"新",m:"new",on:"シン",kun:"あたら・あら",l:"N5",s:13},
+ {k:"古",m:"old",on:"コ",kun:"ふる",l:"N5",s:5},
+ {k:"多",m:"many",on:"タ",kun:"おお",l:"N5",s:6},
+ {k:"少",m:"few / little",on:"ショウ",kun:"すく・すこ",l:"N5",s:4},
+ {k:"早",m:"early / fast",on:"ソウ・サッ",kun:"はや",l:"N5",s:6},
+ {k:"東",m:"east",on:"トウ",kun:"ひがし",l:"N5",s:8},
+ {k:"西",m:"west",on:"セイ・サイ",kun:"にし",l:"N5",s:6},
+ {k:"南",m:"south",on:"ナン",kun:"みなみ",l:"N5",s:9},
+ {k:"北",m:"north",on:"ホク",kun:"きた",l:"N5",s:5},
+ {k:"国",m:"country",on:"コク",kun:"くに",l:"N5",s:8},
+ {k:"外",m:"outside",on:"ガイ・ゲ",kun:"そと・ほか",l:"N5",s:5},
+ {k:"前",m:"front / before",on:"ゼン",kun:"まえ",l:"N5",s:9},
+ {k:"後",m:"after / behind",on:"ゴ・コウ",kun:"あと・うし",l:"N5",s:9},
+ {k:"右",m:"right",on:"ウ・ユウ",kun:"みぎ",l:"N5",s:5},
+ {k:"左",m:"left",on:"サ",kun:"ひだり",l:"N5",s:5},
+ {k:"男",m:"man / male",on:"ダン・ナン",kun:"おとこ",l:"N5",s:7},
+ {k:"女",m:"woman / female",on:"ジョ・ニョ",kun:"おんな",l:"N5",s:3},
+ {k:"子",m:"child",on:"シ・ス",kun:"こ",l:"N5",s:3},
+ {k:"父",m:"father",on:"フ",kun:"ちち",l:"N5",s:4},
+ {k:"母",m:"mother",on:"ボ",kun:"はは",l:"N5",s:5},
+ {k:"兄",m:"older brother",on:"ケイ・キョウ",kun:"あに",l:"N5",s:5},
+ {k:"姉",m:"older sister",on:"シ",kun:"あね",l:"N5",s:8},
+ {k:"弟",m:"younger brother",on:"テイ・ダイ",kun:"おとうと",l:"N5",s:7},
+ {k:"妹",m:"younger sister",on:"マイ",kun:"いもうと",l:"N5",s:8}
+];
 
-        // Init
-        renderKanji(kanjiData, 'kanjiGrid');
-    </script>
+/* Example vocabulary */
+const WORDS = [
+ {w:"日本",r:"にほん",m:"Japan",k:"N5"},
+ {w:"学生",r:"がくせい",m:"student",k:"N5"},
+ {w:"先生",r:"せんせい",m:"teacher",k:"N5"},
+ {w:"学校",r:"がっこう",m:"school",k:"N5"},
+ {w:"友達",r:"ともだち",m:"friend",k:"N5"},
+ {w:"時間",r:"じかん",m:"time",k:"N5"},
+ {w:"今日",r:"きょう",m:"today",k:"N5"},
+ {w:"明日",r:"あした",m:"tomorrow",k:"N5"},
+ {w:"食べる",r:"たべる",m:"to eat",k:"N5"},
+ {w:"飲む",r:"のむ",m:"to drink",k:"N5"},
+ {w:"見る",r:"みる",m:"to see",k:"N5"},
+ {w:"読む",r:"よむ",m:"to read",k:"N5"},
+ {w:"書く",r:"かく",m:"to write",k:"N5"},
+ {w:"聞く",r:"きく",m:"to hear / ask",k:"N5"}
+];
+
+const EXAMPLES = {
+ "日":[
+  ["今日はいい天気です。","Today the weather is good."],
+  ["日本へ行きたいです。","I want to go to Japan."]
+ ],
+ "学":[
+  ["毎日日本語を勉強します。","I study Japanese every day."]
+ ],
+ "食":[
+  ["ご飯を食べます。","I eat a meal."]
+ ],
+ "人":[
+  ["あの人は先生です。","That person is a teacher."]
+ ]
+};
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let state = JSON.parse(localStorage.getItem("kotoba_state") || "{}");
+
+state.studied = state.studied || [];
+state.mastered = state.mastered || [];
+state.reviews = state.reviews || 0;
+state.streak = state.streak || 0;
+state.lastStudy = state.lastStudy || "";
+state.srs = state.srs || {};
+state.favorites = state.favorites || [];
+
+function save(){
+  localStorage.setItem("kotoba_state",JSON.stringify(state));
+}
+
+function markStudy(){
+  const today = new Date().toISOString().slice(0,10);
+
+  if(state.lastStudy !== today){
+    if(state.lastStudy){
+      const previous = new Date(state.lastStudy);
+      const now = new Date(today);
+      const diff = Math.round((now-previous)/86400000);
+
+      if(diff === 1) state.streak++;
+      else if(diff > 1) state.streak = 1;
+    }else{
+      state.streak = 1;
+    }
+
+    state.lastStudy = today;
+  }
+
+  save();
+  updateStats();
+}
+
+function updateStats(){
+  document.getElementById("streak").textContent=state.streak;
+  document.getElementById("studied").textContent=state.studied.length;
+  document.getElementById("mastered").textContent=state.mastered.length;
+  document.getElementById("reviews").textContent=state.reviews;
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function showPage(id,button){
+
+  document.querySelectorAll(".page")
+    .forEach(p=>p.classList.remove("active"));
+
+  const page=document.getElementById(id);
+  if(page) page.classList.add("active");
+
+  document.querySelectorAll(".nav-btn")
+    .forEach(b=>b.classList.remove("active"));
+
+  if(button) button.classList.add("active");
+
+  if(id==="kanji") renderKanji();
+  if(id==="review") renderReview();
+  if(id==="progress") renderProgress();
+  if(id==="writing") setupCanvas();
+}
+
+/* =========================================================
+   LEVELS
+   ========================================================= */
+
+const LEVELS=["N5","N4","N3","N2","N1"];
+
+function renderLevels(){
+
+  const box=document.getElementById("levels");
+
+  box.innerHTML=LEVELS.map(level=>{
+
+    const total=SAMPLE_KANJI.filter(x=>x.l===level).length;
+    const learned=state.mastered.filter(x=>{
+      const k=SAMPLE_KANJI.find(y=>y.k===x);
+      return k && k.l===level;
+    }).length;
+
+    const pct=total ? Math.round(learned/total*100):0;
+
+    return `
+      <div class="card level-card" onclick="filterLevel('${level}');showPage('kanji')">
+        <div class="level">${level}</div>
+        <p>${level==="N5" ? "Beginner Japanese" : "Dataset ready"}</p>
+        <div class="progress"><i style="width:${pct}%"></i></div>
+        <small>${learned}/${total} learned</small>
+      </div>
+    `;
+
+  }).join("");
+}
+
+/* =========================================================
+   KANJI
+   ========================================================= */
+
+let currentFilter="ALL";
+
+function filterLevel(level){
+  currentFilter=level;
+  renderKanji();
+}
+
+function searchKanji(){
+
+  renderKanji(
+    document.getElementById("kanjiSearch").value.trim().toLowerCase()
+  );
+
+}
+
+function renderKanji(query=""){
+
+  const grid=document.getElementById("kanjiGrid");
+
+  let data=SAMPLE_KANJI;
+
+  if(currentFilter!=="ALL"){
+    data=data.filter(x=>x.l===currentFilter);
+  }
+
+  if(query){
+    data=data.filter(x=>
+      x.k.includes(query) ||
+      x.m.toLowerCase().includes(query) ||
+      x.on.toLowerCase().includes(query) ||
+      x.kun.toLowerCase().includes(query)
+    );
+  }
+
+  if(!data.length){
+    grid.innerHTML=`<div class="empty" style="grid-column:1/-1">
+      No result found.
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML=data.map(x=>`
+    <div class="kanji-card" onclick="openKanji('${x.k}')">
+      <div class="kanji-char">${x.k}</div>
+      <div class="kanji-meaning">${x.m}</div>
+      <span class="badge">${x.l}</span>
+    </div>
+  `).join("");
+}
+
+function openKanji(char){
+
+  const k=SAMPLE_KANJI.find(x=>x.k===char);
+
+  if(!k)return;
+
+  const examples=EXAMPLES[char] || [];
+
+  document.getElementById("modalContent").innerHTML=`
+
+    <div class="detail-char">${k.k}</div>
+
+    <div style="text-align:center">
+      <button class="btn primary" onclick="speak('${k.k}')">🔊 Listen</button>
+      <button class="btn outline" onclick="favorite('${k.k}')">
+        ${state.favorites.includes(k.k)?"★ Saved":"☆ Favorite"}
+      </button>
+    </div>
+
+    <h2>${k.m}</h2>
+
+    <div class="info-grid">
+      <div class="info">
+        <small>JLPT</small>
+        <b>${k.l}</b>
+      </div>
+      <div class="info">
+        <small>Stroke count</small>
+        <b>${k.s}</b>
+      </div>
+      <div class="info">
+        <small>On'yomi</small>
+        <b>${k.on || "—"}</b>
+      </div>
+      <div class="info">
+        <small>Kun'yomi</small>
+        <b>${k.kun || "—"}</b>
+      </div>
+    </div>
+
+    <h3>Example sentences</h3>
+
+    ${
+      examples.length
+      ? examples.map(e=>`
+          <div class="example">
+            <b>${e[0]}</b>
+            <br>
+            <span style="color:var(--muted)">${e[1]}</span>
+          </div>
+        `).join("")
+      : `<div class="empty">More examples will appear when the full dataset is connected.</div>`
+    }
+
+  `;
+
+  document.getElementById("modal").classList.add("show");
+}
+
+function hideModal(){
+  document.getElementById("modal").classList.remove("show");
+}
+
+function closeModal(e){
+  if(e.target.id==="modal")hideModal();
+}
+
+function favorite(char){
+
+  if(state.favorites.includes(char)){
+    state.favorites=state.favorites.filter(x=>x!==char);
+  }else{
+    state.favorites.push(char);
+  }
+
+  save();
+  openKanji(char);
+  toast("Favorites updated");
+}
+
+/* =========================================================
+   SPEECH
+   ========================================================= */
+
+function speak(text){
+
+  if(!("speechSynthesis" in window)){
+    toast("Speech is not supported");
+    return;
+  }
+
+  speechSynthesis.cancel();
+
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="ja-JP";
+  u.rate=.8;
+
+  speechSynthesis.speak(u);
+}
+
+/* =========================================================
+   REVIEW / SRS
+   ========================================================= */
+
+let reviewIndex=0;
+
+function renderReview(){
+
+  const cards=SAMPLE_KANJI;
+
+  if(!cards.length)return;
+
+  if(reviewIndex>=cards.length)reviewIndex=0;
+
+  const k=cards[reviewIndex];
+
+  document.getElementById("reviewCount").textContent=
+    `${reviewIndex+1} / ${cards.length}`;
+
+  document.getElementById("flashcard").innerHTML=`
+    <div class="flash-kanji">${k.k}</div>
+    <div class="flash-reading">${k.on}</div>
+    <div class="flash-meaning">${k.m}</div>
+
+    <button class="btn outline" style="margin-top:20px"
+      onclick="speak('${k.k}')">🔊 Japanese Audio</button>
+  `;
+}
+
+function rateCard(rating){
+
+  const k=SAMPLE_KANJI[reviewIndex];
+
+  if(!k)return;
+
+  state.reviews++;
+
+  if(!state.studied.includes(k.k)){
+    state.studied.push(k.k);
+  }
+
+  state.srs[k.k]={
+    rating,
+    lastReviewed:Date.now()
+  };
+
+  if(rating==="good" || rating==="easy"){
+    if(!state.mastered.includes(k.k)){
+      state.mastered.push(k.k);
+    }
+  }
+
+  markStudy();
+
+  reviewIndex++;
+
+  if(reviewIndex>=SAMPLE_KANJI.length){
+    reviewIndex=0;
+    toast("Review cycle complete 🎉");
+  }
+
+  renderReview();
+  renderLevels();
+}
+
+/* =========================================================
+   WRITING
+   ========================================================= */
+
+let canvas,ctx,drawing=false;
+let writingIndex=0;
+
+function setupCanvas(){
+
+  canvas=document.getElementById("canvas");
+  if(!canvas)return;
+
+  const ratio=window.devicePixelRatio || 1;
+
+  const rect=canvas.getBoundingClientRect();
+
+  canvas.width=rect.width*ratio;
+  canvas.height=320*ratio;
+
+  ctx=canvas.getContext("2d");
+
+  ctx.scale(ratio,ratio);
+
+  ctx.lineWidth=4;
+  ctx.lineCap="round";
+  ctx.lineJoin="round";
+
+  canvas.onpointerdown=e=>{
+    drawing=true;
+    ctx.beginPath();
+    const p=pointer(e);
+    ctx.moveTo(p.x,p.y);
+  };
+
+  canvas.onpointermove=e=>{
+    if(!drawing)return;
+    const p=pointer(e);
+    ctx.lineTo(p.x,p.y);
+    ctx.stroke();
+  };
+
+  canvas.onpointerup=()=>{
+    drawing=false;
+  };
+
+  canvas.onpointerleave=()=>{
+    drawing=false;
+  };
+}
+
+function pointer(e){
+
+  const r=canvas.getBoundingClientRect();
+
+  return {
+    x:e.clientX-r.left,
+    y:e.clientY-r.top
+  };
+}
+
+function clearCanvas(){
+
+  if(!ctx)return;
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+function showGuide(){
+
+  if(!ctx)return;
+
+  clearCanvas();
+
+  const char=SAMPLE_KANJI[writingIndex].k;
+
+  ctx.save();
+
+  ctx.globalAlpha=.12;
+  ctx.font="230px 'Noto Serif JP', serif";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText(char,canvas.clientWidth/2,160);
+
+  ctx.restore();
+}
+
+function nextWriting(){
+
+  writingIndex++;
+
+  if(writingIndex>=SAMPLE_KANJI.length){
+    writingIndex=0;
+  }
+
+  document.getElementById("writingChar").textContent=
+    SAMPLE_KANJI[writingIndex].k;
+
+  clearCanvas();
+}
+
+function speakWriting(){
+
+  speak(SAMPLE_KANJI[writingIndex].k);
+}
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+function renderProgress(){
+
+  const total=SAMPLE_KANJI.length;
+  const learned=state.mastered.length;
+
+  const pct=total
+    ? Math.round(learned/total*100)
+    : 0;
+
+  document.getElementById("overallBar").style.width=pct+"%";
+  document.getElementById("overallText").textContent=
+    `${learned} of ${total} sample kanji mastered (${pct}%)`;
+
+  document.getElementById("progressLevels").innerHTML=
+    LEVELS.map(level=>{
+
+      const totalLevel=SAMPLE_KANJI.filter(x=>x.l===level).length;
+
+      const learnedLevel=state.mastered.filter(x=>{
+        const k=SAMPLE_KANJI.find(y=>y.k===x);
+        return k && k.l===level;
+      }).length;
+
+      const p=totalLevel
+        ? Math.round(learnedLevel/totalLevel*100)
+        : 0;
+
+      return `
+        <div class="card" style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between">
+            <b>${level}</b>
+            <span>${learnedLevel}/${totalLevel}</span>
+          </div>
+          <div class="progress">
+            <i style="width:${p}%"></i>
+          </div>
+        </div>
+      `;
+
+    }).join("");
+}
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+function toggleDark(){
+
+  document.body.classList.toggle("dark");
+
+  localStorage.setItem(
+    "kotoba_dark",
+    document.body.classList.contains("dark")
+  );
+}
+
+if(localStorage.getItem("kotoba_dark")==="true"){
+  document.body.classList.add("dark");
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+function resetProgress(){
+
+  if(!confirm("Reset all Kotoba progress?"))return;
+
+  localStorage.removeItem("kotoba_state");
+
+  location.reload();
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer;
+
+function toast(message){
+
+  const el=document.getElementById("toast");
+
+  el.textContent=message;
+  el.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>{
+    el.classList.remove("show");
+  },1800);
+}
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+updateStats();
+renderLevels();
+renderKanji();
+
+</script>
+
 </body>
 </html>
