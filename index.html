@@ -1,1188 +1,367 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#6d5dfc">
-<meta name="description" content="Kotoba - Japanese Kanji and Vocabulary Learning App">
-<title>Kotoba — Japanese Learning</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#6258dc">
+<title>JFT A2 Mock Lab — Developed by Sahriar Antim</title>
 <style>
-:root{
-  --bg:#f6f7fb;
-  --card:#fff;
-  --text:#171822;
-  --muted:#737684;
-  --primary:#6d5dfc;
-  --primary2:#877bff;
-  --border:#e7e7ef;
-  --good:#18a56b;
-  --danger:#e05252;
-  --shadow:0 8px 30px rgba(30,30,60,.08);
-}
+:root{--bg:#f5f6fc;--card:#fff;--ink:#20213a;--muted:#777991;--line:#e4e5ef;--p:#6258dc;--soft:#eeedff;--ok:#16835e;--bad:#d7445d}
 *{box-sizing:border-box}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-button,input{font:inherit}
-button{cursor:pointer}
-.app{max-width:1100px;margin:auto;padding-bottom:90px}
-header{
-  position:sticky;
-  top:0;
-  z-index:20;
-  background:rgba(246,247,251,.92);
-  backdrop-filter:blur(15px);
-  border-bottom:1px solid var(--border);
-}
-.header-inner{
-  max-width:1100px;
-  margin:auto;
-  height:68px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 18px;
-}
-.logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight:800;
-  font-size:20px;
-}
-.logo-icon{
-  width:38px;height:38px;
-  display:grid;place-items:center;
-  color:white;
-  background:linear-gradient(135deg,var(--primary),var(--primary2));
-  border-radius:12px;
-  font-size:22px;
-}
-.icon-btn{
-  width:42px;height:42px;
-  border:1px solid var(--border);
-  background:var(--card);
-  border-radius:12px;
-}
-main{padding:22px 16px}
-.page{display:none}
-.page.active{display:block}
-.hero{
-  padding:25px;
-  border-radius:25px;
-  color:#fff;
-  background:linear-gradient(135deg,#6252f4,#9187ff);
-  box-shadow:var(--shadow);
-}
-.hero h1{margin:0 0 7px;font-size:30px}
-.hero p{margin:0;opacity:.9}
-.hero-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
-.btn{
-  border:0;
-  border-radius:13px;
-  padding:12px 17px;
-  font-weight:700;
-}
-.btn.primary{background:#fff;color:#5d50e9}
-.btn.dark{background:#201b52;color:#fff}
-.btn.outline{
-  background:transparent;
-  border:1px solid var(--border);
-}
-.section-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin:28px 2px 13px;
-}
-.section-title h2{font-size:19px;margin:0}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:17px;
-  box-shadow:var(--shadow);
-}
-.stat{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.stat strong{font-size:25px}
-.stat span{font-size:13px;color:var(--muted)}
-.level-card{
-  min-height:120px;
-  position:relative;
-  overflow:hidden;
-}
-.level{
-  font-size:25px;
-  font-weight:900;
-}
-.level-card p{margin:5px 0;color:var(--muted);font-size:13px}
-.progress{
-  height:7px;
-  border-radius:10px;
-  background:#ededf4;
-  overflow:hidden;
-  margin-top:12px;
-}
-.progress i{
-  display:block;height:100%;
-  background:var(--primary);
-  width:0;
-}
-.searchbox{
-  display:flex;
-  gap:10px;
-  margin-bottom:15px;
-}
-.searchbox input{
-  flex:1;
-  border:1px solid var(--border);
-  background:var(--card);
-  border-radius:14px;
-  padding:14px;
-  outline:none;
-}
-.searchbox button{
-  width:50px;
-  border:0;
-  border-radius:14px;
-  background:var(--primary);
-  color:white;
-}
-.kanji-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-}
-.kanji-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:15px 8px;
-  text-align:center;
-  cursor:pointer;
-}
-.kanji-char{
-  font-family:"Noto Serif JP","Yu Mincho",serif;
-  font-size:42px;
-}
-.kanji-meaning{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:5px;
-}
-.badge{
-  display:inline-block;
-  margin-top:7px;
-  padding:4px 8px;
-  border-radius:8px;
-  background:#efedff;
-  color:#6254ee;
-  font-size:11px;
-  font-weight:700;
-}
-.empty{
-  padding:35px 10px;
-  text-align:center;
-  color:var(--muted);
-}
-.flashcard{
-  min-height:370px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-}
-.flash-kanji{
-  font-family:"Noto Serif JP","Yu Mincho",serif;
-  font-size:100px;
-}
-.flash-reading{font-size:24px;color:var(--primary);margin:5px}
-.flash-meaning{color:var(--muted)}
-.review-buttons{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
-  margin-top:18px;
-}
-.review-buttons button{
-  padding:12px 4px;
-  border:0;
-  border-radius:12px;
-  font-weight:700;
-}
-.again{background:#ffe8e8;color:#c63e3e}
-.hard{background:#fff0dc;color:#b86a00}
-.good{background:#e5f8ef;color:#138254}
-.easy{background:#e8e8ff;color:#574bd2}
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:50;
-  display:none;
-  background:rgba(0,0,0,.5);
-  padding:20px;
-  overflow:auto;
-}
-.modal.show{display:flex;align-items:center;justify-content:center}
-.modal-box{
-  width:min(650px,100%);
-  max-height:90vh;
-  overflow:auto;
-  background:var(--card);
-  border-radius:25px;
-  padding:22px;
-}
-.modal-top{
-  display:flex;
-  justify-content:space-between;
-}
-.close{
-  border:0;
-  background:#eeeef5;
-  border-radius:10px;
-  width:38px;height:38px;
-}
-.detail-char{
-  text-align:center;
-  font-size:110px;
-  font-family:"Noto Serif JP","Yu Mincho",serif;
-}
-.info-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-.info{
-  background:#f7f7fb;
-  padding:13px;
-  border-radius:13px;
-}
-.info small{display:block;color:var(--muted)}
-.example{
-  border-left:3px solid var(--primary);
-  padding:10px 12px;
-  margin:10px 0;
-  background:#fafaff;
-  border-radius:8px;
-}
-canvas{
-  width:100%;
-  height:320px;
-  background:#fff;
-  border:2px dashed #d9d9e5;
-  border-radius:18px;
-  touch-action:none;
-}
-.bottom-nav{
-  position:fixed;
-  z-index:30;
-  left:50%;
-  bottom:10px;
-  transform:translateX(-50%);
-  width:min(700px,calc(100% - 20px));
-  background:rgba(255,255,255,.95);
-  border:1px solid var(--border);
-  box-shadow:var(--shadow);
-  border-radius:20px;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  padding:7px;
-}
-.nav-btn{
-  border:0;
-  background:transparent;
-  padding:9px 3px;
-  border-radius:13px;
-  font-size:11px;
-  color:var(--muted);
-}
-.nav-btn.active{
-  background:#efedff;
-  color:var(--primary);
-  font-weight:800;
-}
-.toast{
-  position:fixed;
-  z-index:100;
-  bottom:85px;
-  left:50%;
-  transform:translateX(-50%) translateY(20px);
-  background:#20212b;
-  color:#fff;
-  padding:12px 18px;
-  border-radius:12px;
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-}
-.toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-}
-.dark{
-  --bg:#111217;
-  --card:#191a21;
-  --text:#f3f3f7;
-  --muted:#a4a5b0;
-  --border:#2a2b34;
-}
-.dark header{background:rgba(17,18,23,.9)}
-.dark .progress{background:#292a32}
-.dark .info,.dark .example{background:#20212a}
-.dark .bottom-nav{background:rgba(25,26,33,.96)}
-@media(min-width:700px){
-  .grid{grid-template-columns:repeat(4,1fr)}
-  .kanji-grid{grid-template-columns:repeat(6,1fr)}
-}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Noto Sans Bengali","Noto Sans JP",sans-serif}
+body.dark{--bg:#151624;--card:#222437;--ink:#f4f4ff;--muted:#b0b2c8;--line:#393b52;--soft:#333052}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid #aaa2ff;outline-offset:2px}
+header{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.nav{max-width:1120px;margin:auto;padding:11px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{display:flex;gap:10px;align-items:center;font-weight:900}
+.logo{background:linear-gradient(135deg,#6258dc,#a8a1ff);color:white;width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:23px}
+.small{font-size:12px;color:var(--muted)}
+main{max-width:1120px;margin:auto;padding:22px 15px 35px}
+.hero{background:linear-gradient(120deg,#4b42b8,#766bf3);color:#fff;border-radius:24px;padding:25px;margin-bottom:18px}
+.hero h1{font-size:clamp(25px,4vw,37px);line-height:1.25;margin:0 0 8px}
+.hero p{margin:0;max-width:800px;color:#f0efff}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;min-width:0}
+h2{font-size:21px;margin:24px 0 12px}
+h3{margin:0 0 8px}
+.btn{border:0;border-radius:12px;background:var(--p);color:white;font-weight:800;padding:10px 15px}
+.btn.alt{background:var(--soft);color:var(--p)}
+.btn.line{background:var(--card);border:1px solid var(--line);color:var(--ink)}
+.btn:disabled{opacity:.4}
+.level{cursor:pointer;transition:.15s}
+.level:hover{transform:translateY(-2px);border-color:var(--p)}
+.level b{font-size:22px;color:var(--p)}
+.level p{color:var(--muted);font-size:14px;min-height:40px}
+.tag{display:inline-block;background:var(--soft);color:var(--p);border-radius:20px;padding:3px 9px;font-size:12px;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.stats .card strong{display:block;font-size:25px;color:var(--p)}
+.hidden{display:none!important}
+.test-layout{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:15px;align-items:start}
+.timer{background:var(--soft);color:var(--p);font-weight:900;border-radius:11px;padding:7px 12px;font-variant-numeric:tabular-nums}
+.timer.warn{background:#fff0e4;color:#b64a08}
+.progress{height:7px;background:var(--line);border-radius:20px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;background:var(--p);width:0}
+.question{font-size:clamp(20px,3vw,26px);font-weight:850;line-height:1.6;margin:16px 0 5px}
+.bn{color:var(--muted);font-size:14px;margin:0 0 16px}
+.options{display:grid;gap:10px}
+.opt{display:flex;gap:10px;align-items:center;text-align:left;background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:13px;padding:12px}
+.opt.sel{border-color:var(--p);background:var(--soft)}
+.letter{width:29px;height:29px;display:grid;place-items:center;border:1px solid var(--line);border-radius:9px;font-size:12px;font-weight:900;flex-shrink:0}
+.opt.sel .letter{background:var(--p);color:#fff}
+.qgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.qnum{aspect-ratio:1;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font-size:12px}
+.qnum.ans{background:var(--soft);border-color:var(--p);color:var(--p)}
+.qnum.cur{background:var(--p);color:white}
+.qnum.flag{box-shadow:inset 0 -3px #efa52a}
+.actions{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:20px}
+.actions div{display:flex;gap:8px;flex-wrap:wrap}
+.note{font-size:12px;color:var(--muted)}
+.review{border:1px solid var(--line);border-radius:13px;padding:14px;margin:10px 0}
+.good{color:var(--ok);background:#16835e12;padding:8px;border-radius:9px;margin-top:6px}
+.bad{color:var(--bad);background:#d7445d12;padding:8px;border-radius:9px;margin-top:6px}
+.history{padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}
+.history:last-child{border:0}
+.score{font-size:28px;font-weight:900;color:var(--p);text-align:center}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:24px 0 4px}
+a{color:var(--p)}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.test-layout{grid-template-columns:1fr}.nav{padding:9px 12px}main{padding:16px 11px 30px}.hero{padding:21px}.stats{gap:7px}.stats .card{padding:12px 10px}}
+@media(max-width:440px){.grid{grid-template-columns:1fr}.brand{font-size:14px}.logo{width:36px;height:36px}.actions .btn{padding:9px 11px}.card{padding:14px}}
 </style>
 </head>
-
 <body>
-
 <header>
-  <div class="header-inner">
-    <div class="logo">
-      <div class="logo-icon">言</div>
-      <span>Kotoba</span>
-    </div>
-    <button class="icon-btn" onclick="toggleDark()">🌙</button>
-  </div>
+<div class="nav">
+<div class="brand"><div class="logo">日</div><div>JFT A2 Mock Lab<div class="small">日本語 · বাংলা practice</div></div></div>
+<div class="row"><button class="btn line" id="homeBtn">⌂</button><button class="btn line" id="themeBtn">☾</button></div>
+</div>
 </header>
-
-<div class="app">
 <main>
-
-<!-- HOME -->
-<section id="home" class="page active">
-
-  <div class="hero">
-    <h1>Learn Japanese smarter 🇯🇵</h1>
-    <p>Kanji, vocabulary, readings and daily review — all in one place.</p>
-    <div class="hero-actions">
-      <button class="btn primary" onclick="showPage('review')">Start Review</button>
-      <button class="btn dark" onclick="showPage('kanji')">Explore Kanji</button>
-    </div>
-  </div>
-
-  <div class="section-title">
-    <h2>Your Progress</h2>
-  </div>
-
-  <div class="grid">
-    <div class="card stat">
-      <div><strong id="streak">0</strong><br><span>Day streak</span></div>
-      <span>🔥</span>
-    </div>
-    <div class="card stat">
-      <div><strong id="studied">0</strong><br><span>Studied</span></div>
-      <span>📚</span>
-    </div>
-    <div class="card stat">
-      <div><strong id="mastered">0</strong><br><span>Mastered</span></div>
-      <span>⭐</span>
-    </div>
-    <div class="card stat">
-      <div><strong id="reviews">0</strong><br><span>Reviews</span></div>
-      <span>🔁</span>
-    </div>
-  </div>
-
-  <div class="section-title"><h2>JLPT Levels</h2></div>
-
-  <div class="grid" id="levels"></div>
-
+<section id="homeView">
+<div class="hero">
+<h1>JFT-Basic Practice Lab 🇯🇵</h1>
+<p>১৫টি আলাদা মক টেস্ট সেট। প্রতিটিতে ৫০টি প্রশ্ন ও ৬০ মিনিটের টাইমার। চারটি বিভাগ, উত্তর রিভিউ, স্কোর ও ব্রাউজারে পরীক্ষার ইতিহাস। প্রশ্নগুলো নতুন করে তৈরি অনুশীলনী—অফিশিয়াল প্রশ্নের কপি নয়।</p>
+</div>
+<div class="stats">
+<div class="card"><strong id="totalTests">0</strong><span class="small">সম্পন্ন পরীক্ষা</span></div>
+<div class="card"><strong id="best">—</strong><span class="small">সেরা স্কোর</span></div>
+<div class="card"><strong id="avg">—</strong><span class="small">গড় স্কোর</span></div>
+</div>
+<div class="row"><h2 style="margin:12px 0">Mock Test নির্বাচন করো</h2><span class="tag">15 Sets · 50 Questions · 60 min</span></div>
+<div class="grid" id="sets"></div>
+<h2>সাম্প্রতিক ফলাফল</h2><div class="card" id="history"></div>
+<div class="card" style="margin-top:15px">
+<h3>📌 JFT-Basic-এর চারটি বিভাগ</h3>
+<p class="small">文字と語彙 (লিপি ও শব্দভান্ডার) · 会話と表現 (কথোপকথন ও অভিব্যক্তি) · 聴解 (শ্রবণ) · 読解 (পঠন)। এই সাইটের সেটগুলো অনুশীলনের জন্য JFT-style; আসল পরীক্ষা হুবহু নকল নয় এবং স্কোর অফিসিয়াল স্কোরের সমতুল্য নয়।</p>
+<p class="small">অফিশিয়াল তথ্য: <a href="https://www.jpf.go.jp/jft-basic/e/" target="_blank" rel="noopener">Japan Foundation JFT-Basic</a> · <a href="https://www.irodori.jpf.go.jp/en/" target="_blank" rel="noopener">IRODORI Japanese learning</a></p>
+</div>
 </section>
 
-<!-- KANJI -->
-<section id="kanji" class="page">
-
-  <div class="section-title">
-    <h2>Kanji Dictionary</h2>
-  </div>
-
-  <div class="searchbox">
-    <input id="kanjiSearch"
-           placeholder="Search kanji, meaning or reading..."
-           oninput="searchKanji()">
-    <button onclick="searchKanji()">⌕</button>
-  </div>
-
-  <div class="grid" style="margin-bottom:15px">
-    <button class="btn outline" onclick="filterLevel('ALL')">All</button>
-    <button class="btn outline" onclick="filterLevel('N5')">N5</button>
-    <button class="btn outline" onclick="filterLevel('N4')">N4</button>
-    <button class="btn outline" onclick="filterLevel('N3')">N3</button>
-    <button class="btn outline" onclick="filterLevel('N2')">N2</button>
-    <button class="btn outline" onclick="filterLevel('N1')">N1</button>
-  </div>
-
-  <div id="kanjiGrid" class="kanji-grid"></div>
-
+<section id="testView" class="hidden">
+<div class="row"><div><button class="btn line" id="exitBtn">← হোম</button><div class="small" id="setName"></div></div><div class="timer" id="timer">60:00</div></div>
+<div class="progress"><div id="bar"></div></div>
+<div class="test-layout">
+<div class="card">
+<div class="row"><span class="tag" id="section"></span><span class="small" id="counter"></span></div>
+<h2 class="question" id="q"></h2><p class="bn" id="bn"></p><div id="audioArea"></div>
+<div class="options" id="options"></div>
+<div class="actions"><button class="btn line" id="prevBtn">← আগের</button><div><button class="btn alt" id="flagBtn">☆ মার্ক</button><button class="btn" id="nextBtn">পরের →</button></div></div>
+</div>
+<aside>
+<div class="card"><h3>প্রশ্ন নেভিগেশন</h3><div class="qgrid" id="qgrid"></div><p class="note" id="answered"></p></div>
+<div class="card" style="margin-top:12px"><h3>জমা দাও</h3><p class="note">সময় শেষ হলে পরীক্ষা নিজে থেকেই জমা হবে।</p><button class="btn" style="width:100%" id="submitBtn">পরীক্ষা জমা দাও ✓</button></div>
+</aside>
+</div>
 </section>
 
-<!-- REVIEW -->
-<section id="review" class="page">
-
-  <div class="section-title">
-    <h2>Flashcard Review</h2>
-    <span id="reviewCount"></span>
-  </div>
-
-  <div class="card flashcard" id="flashcard"></div>
-
-  <div class="review-buttons">
-    <button class="again" onclick="rateCard('again')">Again</button>
-    <button class="hard" onclick="rateCard('hard')">Hard</button>
-    <button class="good" onclick="rateCard('good')">Good</button>
-    <button class="easy" onclick="rateCard('easy')">Easy</button>
-  </div>
-
+<section id="resultView" class="hidden">
+<div class="row"><h2>পরীক্ষার ফলাফল</h2><button class="btn line" id="resultHomeBtn">⌂ হোম</button></div>
+<div class="card"><div class="score" id="score"></div><h2 id="message" style="text-align:center"></h2>
+<div class="row"><span id="rightCount"></span><span id="wrongCount"></span><span id="blankCount"></span></div>
+<div class="actions" style="justify-content:center"><button class="btn alt" id="againBtn">একই সেট আবার দাও</button><button class="btn" id="showReviewBtn">উত্তর রিভিউ</button></div>
+</div>
+<h2 id="reviewTitle">উত্তর ও ব্যাখ্যা</h2><div id="review"></div>
 </section>
-
-<!-- WRITING -->
-<section id="writing" class="page">
-
-  <div class="section-title">
-    <h2>Writing Practice</h2>
-  </div>
-
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <div style="font-size:13px;color:var(--muted)">Practice</div>
-        <div id="writingChar" style="font-size:50px;font-family:serif">日</div>
-      </div>
-      <button class="btn outline" onclick="speakWriting()">🔊</button>
-    </div>
-
-    <canvas id="canvas"></canvas>
-
-    <div style="display:flex;gap:8px;margin-top:12px">
-      <button class="btn outline" onclick="clearCanvas()">Clear</button>
-      <button class="btn primary" onclick="showGuide()">Show Guide</button>
-      <button class="btn dark" onclick="nextWriting()">Next</button>
-    </div>
-  </div>
-
-</section>
-
-<!-- PROGRESS -->
-<section id="progress" class="page">
-
-  <div class="section-title"><h2>My Progress</h2></div>
-
-  <div class="card">
-    <h3>Overall progress</h3>
-    <div class="progress"><i id="overallBar"></i></div>
-    <p id="overallText" style="color:var(--muted)">0%</p>
-  </div>
-
-  <div class="section-title"><h2>JLPT Progress</h2></div>
-  <div id="progressLevels"></div>
-
-  <div class="card" style="margin-top:15px">
-    <button class="btn outline" onclick="resetProgress()">Reset all progress</button>
-  </div>
-
-</section>
-
+<footer>Independent practice project · Official test affiliation নেই<br>Developed by Sahriar Antim</footer>
 </main>
-</div>
-
-<nav class="bottom-nav">
-  <button class="nav-btn active" onclick="showPage('home',this)">🏠<br>Home</button>
-  <button class="nav-btn" onclick="showPage('kanji',this)">字<br>Kanji</button>
-  <button class="nav-btn" onclick="showPage('review',this)">🧠<br>Review</button>
-  <button class="nav-btn" onclick="showPage('writing',this)">✍️<br>Writing</button>
-  <button class="nav-btn" onclick="showPage('progress',this)">📊<br>Progress</button>
-</nav>
-
-<div id="modal" class="modal" onclick="closeModal(event)">
-  <div class="modal-box" onclick="event.stopPropagation()">
-    <div class="modal-top">
-      <b>Kanji Details</b>
-      <button class="close" onclick="hideModal()">×</button>
-    </div>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
-<div id="toast" class="toast"></div>
 
 <script>
+"use strict";
 
-/* =========================================================
-   KOTOBA DATA
-   The app can load large JSON datasets from /data/.
-   ========================================================= */
+/* Original practice questions. These are not official JFT/JLPT exam questions. */
+const RAW = [
+["文字と語彙","毎朝、新聞を（　）。","প্রতিদিন সকালে সংবাদপত্র ____।",["読みます","飲みます","聞きます","書きます"],0,"読む（よむ）= পড়া。"],
+["文字と語彙","「病院」の読み方はどれですか。","病院-এর সঠিক উচ্চারণ কোনটি?",["びょういん","びよういん","びょいん","びょうえん"],0,"病院（びょういん）মানে হাসপাতাল。"],
+["文字と語彙","「切符」は何ですか。","切符 বলতে কী বোঝায়?",["টিকিট","ওষুধ","চিঠি","জুতা"],0,"切符（きっぷ）= টিকিট。"],
+["文字と語彙","「安い」の反対の意味はどれですか。","安い (সস্তা)-এর বিপরীত কোনটি?",["高い","広い","近い","早い"],0,"高い（たかい）= দামি/উঁচু。"],
+["文字と語彙","「入口」はどこですか。","入口 বলতে কোন জায়গা?",["প্রবেশপথ","বের হওয়ার পথ","রান্নাঘর","বারান্দা"],0,"入口（いりぐち）= প্রবেশপথ。"],
+["文字と語彙","薬を飲む前に、説明を（　）ください。","ওষুধ খাওয়ার আগে নির্দেশনা ____।",["読んで","泳いで","歩いて","歌って"],0,"説明を読む = নির্দেশনা পড়া。"],
+["文字と語彙","「毎週」はどういう意味ですか。","毎週-এর অর্থ কী?",["প্রতি সপ্তাহে","প্রতি মাসে","গত সপ্তাহে","আগামী বছর"],0,"毎週（まいしゅう）= প্রতি সপ্তাহে。"],
+["文字と語彙","「予約」の意味はどれですか。","予約-এর অর্থ কী?",["আগে থেকে বুকিং","রসিদ","ছাড়","বেতন"],0,"予約（よやく）= বুকিং/সংরক্ষণ。"],
+["文字と語彙","「遅い」の意味に近いものはどれですか。","遅い-এর কাছাকাছি অর্থ কোনটি?",["দেরি/ধীর","দ্রুত","সস্তা","সহজ"],0,"遅い（おそい）= দেরি/ধীর。"],
+["文字と語彙","「働く」の読み方はどれですか。","働く-এর উচ্চারণ কোনটি?",["はたらく","はだらく","はたるく","はたらけ"],0,"働く（はたらく）= কাজ করা。"],
+["文字と語彙","「電車」は何ですか。","電車 বলতে কী?",["ট্রেন","বিমান","জাহাজ","সাইকেল"],0,"電車（でんしゃ）= ট্রেন。"],
+["文字と語彙","「休み」はどういう意味ですか。","休み-এর অর্থ কী?",["ছুটি/বিশ্রাম","কাজ","পরীক্ষা","দোকান"],0,"休み（やすみ）= ছুটি বা বিশ্রাম。"],
+["文字と語彙","「住所」を書いてください。何を書きますか。","住所 বলতে কী লিখতে হবে?",["ঠিকানা","নাম","বয়স","সময়"],0,"住所（じゅうしょ）= ঠিকানা。"],
+["文字と語彙","「右」の反対はどれですか。","右-এর বিপরীত কোনটি?",["左","上","下","前"],0,"右（みぎ）= ডান; 左（ひだり）= বাম。"],
+["文字と語彙","「水曜日」は何曜日ですか。","水曜日 কোন বার?",["বুধবার","সোমবার","শুক্রবার","রবিবার"],0,"水曜日（すいようび）= বুধবার。"],
+["文字と語彙","「寒い」の意味はどれですか。","寒い-এর অর্থ কী?",["ঠান্ডা","গরম","ব্যস্ত","মজার"],0,"寒い（さむい）= ঠান্ডা আবহাওয়া।"],
+["文字と語彙","「便利」の意味はどれですか。","便利-এর অর্থ কী?",["সুবিধাজনক","বিপজ্জনক","নোংরা","দূরে"],0,"便利（べんり）= সুবিধাজনক。"],
+["文字と語彙","「写真を撮ります」の意味はどれですか。","写真を撮ります-এর অর্থ কী?",["ছবি তুলি","ছবি আঁকি","চিঠি লিখি","গান শুনি"],0,"写真を撮る（しゃしんをとる）= ছবি তোলা。"],
 
-const SAMPLE_KANJI = [
- {k:"日",m:"day / sun",on:"ニチ・ジツ",kun:"ひ・か",l:"N5",s:4},
- {k:"月",m:"month / moon",on:"ゲツ・ガツ",kun:"つき",l:"N5",s:4},
- {k:"火",m:"fire",on:"カ",kun:"ひ・ほ",l:"N5",s:4},
- {k:"水",m:"water",on:"スイ",kun:"みず",l:"N5",s:4},
- {k:"木",m:"tree / wood",on:"モク・ボク",kun:"き・こ",l:"N5",s:4},
- {k:"金",m:"gold / money",on:"キン・コン",kun:"かね",l:"N5",s:8},
- {k:"土",m:"earth / soil",on:"ド・ト",kun:"つち",l:"N5",s:3},
- {k:"人",m:"person",on:"ジン・ニン",kun:"ひと",l:"N5",s:2},
- {k:"大",m:"big / large",on:"ダイ・タイ",kun:"おお",l:"N5",s:3},
- {k:"小",m:"small",on:"ショウ",kun:"ちい・こ・お",l:"N5",s:3},
- {k:"中",m:"middle / inside",on:"チュウ",kun:"なか",l:"N5",s:4},
- {k:"上",m:"up / above",on:"ジョウ",kun:"うえ・あ",l:"N5",s:3},
- {k:"下",m:"down / below",on:"カ・ゲ",kun:"した・さ・くだ",l:"N5",s:3},
- {k:"山",m:"mountain",on:"サン",kun:"やま",l:"N5",s:3},
- {k:"川",m:"river",on:"セン",kun:"かわ",l:"N5",s:3},
- {k:"学",m:"study / learning",on:"ガク",kun:"まな",l:"N5",s:8},
- {k:"生",m:"life / birth",on:"セイ・ショウ",kun:"い・う・なま",l:"N5",s:5},
- {k:"先",m:"before / ahead",on:"セン",kun:"さき",l:"N5",s:6},
- {k:"行",m:"go / conduct",on:"コウ・ギョウ",kun:"い・おこな",l:"N5",s:6},
- {k:"来",m:"come / next",on:"ライ",kun:"く・き・こ",l:"N5",s:7},
- {k:"見",m:"see / look",on:"ケン",kun:"み",l:"N5",s:7},
- {k:"食",m:"eat / food",on:"ショク",kun:"た・く",l:"N5",s:9},
- {k:"飲",m:"drink",on:"イン",kun:"の",l:"N5",s:12},
- {k:"話",m:"talk / story",on:"ワ",kun:"はな・はなし",l:"N5",s:13},
- {k:"読",m:"read",on:"ドク",kun:"よ",l:"N5",s:14},
- {k:"書",m:"write",on:"ショ",kun:"か",l:"N5",s:10},
- {k:"聞",m:"hear / ask",on:"ブン・モン",kun:"き・き",l:"N5",s:14},
- {k:"語",m:"language / word",on:"ゴ",kun:"かた",l:"N5",s:14},
- {k:"電",m:"electricity",on:"デン",kun:"",l:"N5",s:13},
- {k:"車",m:"car / vehicle",on:"シャ",kun:"くるま",l:"N5",s:7},
- {k:"校",m:"school",on:"コウ",kun:"",l:"N5",s:10},
- {k:"友",m:"friend",on:"ユウ",kun:"とも",l:"N5",s:4},
- {k:"名",m:"name",on:"メイ・ミョウ",kun:"な",l:"N5",s:6},
- {k:"年",m:"year",on:"ネン",kun:"とし",l:"N5",s:6},
- {k:"時",m:"time / hour",on:"ジ",kun:"とき",l:"N5",s:10},
- {k:"間",m:"interval / between",on:"カン・ケン",kun:"あいだ・ま",l:"N5",s:12},
- {k:"毎",m:"every",on:"マイ",kun:"",l:"N5",s:6},
- {k:"何",m:"what",on:"カ",kun:"なに・なん",l:"N5",s:7},
- {k:"今",m:"now",on:"コン・キン",kun:"いま",l:"N5",s:4},
- {k:"週",m:"week",on:"シュウ",kun:"",l:"N5",s:11},
- {k:"白",m:"white",on:"ハク・ビャク",kun:"しろ・しら",l:"N5",s:5},
- {k:"赤",m:"red",on:"セキ・シャク",kun:"あか",l:"N5",s:7},
- {k:"青",m:"blue",on:"セイ・ショウ",kun:"あお",l:"N5",s:8},
- {k:"空",m:"sky / empty",on:"クウ",kun:"そら・あ",l:"N5",s:8},
- {k:"天",m:"heaven / sky",on:"テン",kun:"あめ・あま",l:"N5",s:4},
- {k:"気",m:"spirit / energy",on:"キ・ケ",kun:"",l:"N5",s:6},
- {k:"雨",m:"rain",on:"ウ",kun:"あめ・あま",l:"N5",s:8},
- {k:"花",m:"flower",on:"カ",kun:"はな",l:"N5",s:7},
- {k:"犬",m:"dog",on:"ケン",kun:"いぬ",l:"N5",s:4},
- {k:"猫",m:"cat",on:"ビョウ",kun:"ねこ",l:"N5",s:11},
- {k:"魚",m:"fish",on:"ギョ",kun:"さかな・うお",l:"N5",s:11},
- {k:"鳥",m:"bird",on:"チョウ",kun:"とり",l:"N5",s:11},
- {k:"本",m:"book / origin",on:"ホン",kun:"もと",l:"N5",s:5},
- {k:"円",m:"yen / circle",on:"エン",kun:"まる",l:"N5",s:4},
- {k:"入",m:"enter",on:"ニュウ",kun:"い・はい",l:"N5",s:2},
- {k:"出",m:"exit / leave",on:"シュツ",kun:"で・だ",l:"N5",s:5},
- {k:"休",m:"rest",on:"キュウ",kun:"やす",l:"N5",s:6},
- {k:"長",m:"long / leader",on:"チョウ",kun:"なが",l:"N5",s:8},
- {k:"高",m:"high / expensive",on:"コウ",kun:"たか",l:"N5",s:10},
- {k:"安",m:"cheap / safe",on:"アン",kun:"やす",l:"N5",s:6},
- {k:"新",m:"new",on:"シン",kun:"あたら・あら",l:"N5",s:13},
- {k:"古",m:"old",on:"コ",kun:"ふる",l:"N5",s:5},
- {k:"多",m:"many",on:"タ",kun:"おお",l:"N5",s:6},
- {k:"少",m:"few / little",on:"ショウ",kun:"すく・すこ",l:"N5",s:4},
- {k:"早",m:"early / fast",on:"ソウ・サッ",kun:"はや",l:"N5",s:6},
- {k:"東",m:"east",on:"トウ",kun:"ひがし",l:"N5",s:8},
- {k:"西",m:"west",on:"セイ・サイ",kun:"にし",l:"N5",s:6},
- {k:"南",m:"south",on:"ナン",kun:"みなみ",l:"N5",s:9},
- {k:"北",m:"north",on:"ホク",kun:"きた",l:"N5",s:5},
- {k:"国",m:"country",on:"コク",kun:"くに",l:"N5",s:8},
- {k:"外",m:"outside",on:"ガイ・ゲ",kun:"そと・ほか",l:"N5",s:5},
- {k:"前",m:"front / before",on:"ゼン",kun:"まえ",l:"N5",s:9},
- {k:"後",m:"after / behind",on:"ゴ・コウ",kun:"あと・うし",l:"N5",s:9},
- {k:"右",m:"right",on:"ウ・ユウ",kun:"みぎ",l:"N5",s:5},
- {k:"左",m:"left",on:"サ",kun:"ひだり",l:"N5",s:5},
- {k:"男",m:"man / male",on:"ダン・ナン",kun:"おとこ",l:"N5",s:7},
- {k:"女",m:"woman / female",on:"ジョ・ニョ",kun:"おんな",l:"N5",s:3},
- {k:"子",m:"child",on:"シ・ス",kun:"こ",l:"N5",s:3},
- {k:"父",m:"father",on:"フ",kun:"ちち",l:"N5",s:4},
- {k:"母",m:"mother",on:"ボ",kun:"はは",l:"N5",s:5},
- {k:"兄",m:"older brother",on:"ケイ・キョウ",kun:"あに",l:"N5",s:5},
- {k:"姉",m:"older sister",on:"シ",kun:"あね",l:"N5",s:8},
- {k:"弟",m:"younger brother",on:"テイ・ダイ",kun:"おとうと",l:"N5",s:7},
- {k:"妹",m:"younger sister",on:"マイ",kun:"いもうと",l:"N5",s:8}
+["会話と表現","すみません、駅はどこですか。","স্টেশন কোথায়—এ প্রশ্নের উপযুক্ত উত্তর কোনটি?",["あそこです。","いただきます。","おやすみなさい。","おめでとう。"],0,"あそこです = ওখানে।"],
+["会話と表現","店で「これをください」と言いました。何をしたいですか。","দোকানে これをください বললে কী বোঝায়?",["এটা কিনতে চাই","এটা ফেরত দিতে চাই","রাস্তা জানতে চাই","কাজ চাই"],0,"これをください = এটা দিন।"],
+["会話と表現","友達に「明日、いっしょに行きませんか」と誘われました。行くとき何と言いますか。","বন্ধুর আমন্ত্রণে রাজি হলে কী বলবে?",["いいですね。行きましょう。","わかりません。","ごちそうさまでした。","失礼しました。"],0,"行きましょう = চল যাই।"],
+["会話と表現","仕事に遅れました。最初に何と言いますか。","কাজে দেরি হলে প্রথমে কী বলবে?",["遅れてすみません。","おめでとうございます。","いってきます。","いただきます。"],0,"遅れてすみません = দেরির জন্য দুঃখিত。"],
+["会話と表現","「もう一度お願いします」はどんなときに使いますか。","もう一度お願いします কখন বলা হয়?",["আবার বলতে অনুরোধ করলে","বিদায় জানালে","খাবার চাইলে","ধন্যবাদ দিলে"],0,"もう一度 = আরেকবার।"],
+["会話と表現","A：ありがとうございます。B：＿＿＿。","ধন্যবাদের উত্তরে কী বলবে?",["どういたしまして","おやすみなさい","いってらっしゃい","ただいま"],0,"どういたしまして = আপনাকে স্বাগতম।"],
+["会話と表現","病院の受付で、予約があると言いたいです。","হাসপাতালের রিসেপশনে বুকিং আছে বলবে কীভাবে?",["予約しています。","おなかがすきました。","電車に乗ります。","水を飲みました。"],0,"予約しています = আমার বুকিং আছে。"],
+["会話と表現","「ここで写真を撮ってもいいですか」と聞きました。何を確認していますか。","এখানে ছবি তোলা যাবে কি না—কী জানতে চাইছে?",["অনুমতি","দাম","সময়","ঠিকানা"],0,"〜てもいいですか = ... করতে পারি কি?"],
+["会話と表現","友達が「今日は少し具合が悪いです」と言いました。何と答えますか。","বন্ধু অসুস্থ বোধ করছে বললে কী বলবে?",["大丈夫ですか。","おめでとう。","いただきます。","いってきます。"],0,"大丈夫ですか = তুমি ঠিক আছ?"],
+["会話と表現","店員：袋はいりますか。客：＿＿＿。","দোকানদার ব্যাগ লাগবে কি না জিজ্ঞেস করলে ব্যাগ না চাইলে কী বলবে?",["いいえ、けっこうです。","はい、行きます。","おかえりなさい。","わかりましたか。"],0,"いいえ、けっこうです = না, লাগবে না।"],
+["会話と表現","A：何時に会いましょうか。B：三時はどうですか。Bさんは何を提案していますか。","তিনটায় দেখা করার প্রস্তাবটি কী?",["সময়","জায়গা","দাম","খাবার"],0,"三時はどうですか = তিনটা কেমন হয়?"],
+["会話と表現","「すみません、よく聞こえませんでした」と言いました。どうしてですか。","ভালোভাবে শুনতে না পেলে কেন বলবে?",["আবার বলতে বলার জন্য","দাম কমানোর জন্য","বিদায় জানাতে","ধন্যবাদ দিতে"],0,"よく聞こえませんでした = ভালোভাবে শুনতে পাইনি।"],
+
+["聴解","店員：いらっしゃいませ。客：水を一つください。客は何を注文しましたか。","ক্রেতা কী অর্ডার করেছে?",["পানি","কফি","চা","জুস"],0,"水を一つ = এক গ্লাস/বোতল পানি।","水を一つください。"],
+["聴解","男：明日は何時に出ますか。女：朝七時に出ます。女の人は何時に出ますか。","মহিলা কখন বের হবে?",["সকাল সাতটা","সকাল আটটা","দুপুর বারোটা","সন্ধ্যা সাতটা"],0,"朝七時 = সকাল সাতটা。","朝七時に出ます。"],
+["聴解","女：すみません、郵便局はどこですか。男：この道をまっすぐ行って、右です。郵便局はどこですか。","পোস্ট অফিস কোন দিকে?",["সোজা গিয়ে ডানে","সোজা গিয়ে বামে","পেছনে","স্টেশনের ভেতরে"],0,"まっすぐ行って右 = সোজা গিয়ে ডানে。","この道をまっすぐ行って、右です。"],
+["聴解","男：今日は雨ですね。女：そうですね。傘を持ってきましたか。男の人は何を持ってきたか聞かれていますか。","লোকটিকে কী এনেছে জিজ্ঞেস করা হয়েছে?",["ছাতা","বই","খাবার","টিকিট"],0,"傘（かさ）= ছাতা。","傘を持ってきましたか。"],
+["聴解","女：会議は二時からです。男：わかりました。何時に始まりますか。","মিটিং কখন শুরু হবে?",["দুপুর দুইটা","দুপুর একটা","বিকেল তিনটা","সকাল নয়টা"],0,"二時から = দুইটা থেকে。","会議は二時からです。"],
+["聴解","男：週末は何をしましたか。女：家で映画を見ました。女の人は何をしましたか。","মহিলা ছুটির দিনে কী করেছে?",["বাড়িতে সিনেমা দেখেছে","পার্কে গেছে","কাজ করেছে","বই কিনেছে"],0,"映画を見ました = সিনেমা দেখেছি。","家で映画を見ました。"],
+["聴解","女：このシャツはいくらですか。店員：二千円です。シャツはいくらですか。","শার্টের দাম কত?",["২০০০ ইয়েন","১০০০ ইয়েন","৩০০০ ইয়েন","৫০০ ইয়েন"],0,"二千円 = ২০০০ ইয়েন。","二千円です。"],
+["聴解","男：次の電車は何時ですか。女：十時十五分です。電車は何時ですか。","ট্রেন কখন?",["১০:১৫","১০:৩০","১১:১৫","৯:১৫"],0,"十時十五分 = ১০টা ১৫ মিনিট。","十時十五分です。"],
+
+["読解","図書館は午前九時から午後六時までです。何時に閉まりますか。","লাইব্রেরি কখন বন্ধ হয়?",["সকাল নয়টা","বিকেল চারটা","সন্ধ্যা ছয়টা","রাত নয়টা"],2,"午後六時 = সন্ধ্যা ছয়টা。"],
+["読解","田中さんは月曜日から金曜日まで働きます。休みはいつですか。","তানাকা সোমবার-শুক্রবার কাজ করেন। সাধারণত ছুটি কবে?",["মঙ্গলবার","বৃহস্পতিবার","শনিবার ও রবিবার","সোমবার"],2,"শনিবার ও রবিবার সাপ্তাহিক ছুটি。"],
+["読解","この薬は一日に三回、食事のあとで飲んでください。薬はいつ飲みますか。","ওষুধ কখন খেতে হবে?",["খাবারের আগে","খাবারের পরে দিনে তিনবার","রাতে একবার","সকালে একবার"],1,"食事のあと = খাবারের পরে; 一日に三回 = দিনে তিনবার。"],
+["読解","バスは十分後に来ます。バスはいつ来ますか。","বাস কখন আসবে?",["এখনই","১০ মিনিট পরে","৩০ মিনিট পরে","এক ঘণ্টা পরে"],1,"十分後 = দশ মিনিট পরে。"],
+["読解","勤務時間：9:00〜17:00。休日：土曜日・日曜日。仕事は何時に終わりますか。","কাজ কখন শেষ?",["সকাল নয়টা","বিকেল পাঁচটা","সন্ধ্যা সাতটা","রাত নয়টা"],1,"17:00 = বিকেল পাঁচটা。"],
+["読解","「本日、工事のため入口を使用できません。裏口をご利用ください。」何を使いますか。","নোটিশ অনুযায়ী কোন পথ ব্যবহার করবে?",["সামনের প্রবেশপথ","পেছনের প্রবেশপথ","জানালা","পার্কিং"],1,"裏口（うらぐち）= পেছনের প্রবেশপথ。"],
+["読解","スーパーのセールは金曜日から日曜日までです。セールは何曜日に終わりますか。","সেলের শেষ দিন কোনটি?",["শুক্রবার","শনিবার","রবিবার","সোমবার"],2,"金曜日から日曜日まで = শুক্রবার থেকে রবিবার পর্যন্ত。"],
+["読解","電車が止まっています。駅員に聞いてください。何をしますか。","ট্রেন বন্ধ থাকলে কী করা উচিত?",["স্টেশন কর্মীকে জিজ্ঞাসা করা","ট্রেনের ভিতরে ঘুমানো","বাড়িতে ফোন বন্ধ করা","টিকিট ফেলে দেওয়া"],0,"駅員（えきいん）= স্টেশন কর্মী。"],
+["読解","会議は午後二時に始まります。五分前に来てください。何時に来ますか。","মিটিংয়ের পাঁচ মিনিট আগে কখন আসবে?",["1:45","1:55","2:05","2:15"],1,"দুইটার পাঁচ মিনিট আগে = 1:55。"],
+["読解","この紙に名前と電話番号を書いてください。何を書きますか。","কাগজে কী লিখতে হবে?",["নাম ও ফোন নম্বর","শুধু ঠিকানা","জন্মদিন ও দেশ","শুধু ইমেইল"],0,"名前と電話番号 = নাম ও ফোন নম্বর。"],
+["読解","店は午前十時に開き、午後八時に閉まります。何時間営業しますか。","দোকান কত ঘণ্টা খোলা থাকে?",["৮ ঘণ্টা","৯ ঘণ্টা","১০ ঘণ্টা","১২ ঘণ্টা"],2,"সকাল ১০টা থেকে রাত ৮টা = ১০ ঘণ্টা。"],
+["読解","この部屋では食べ物を食べないでください。何が禁止されていますか。","এই ঘরে কী নিষেধ?",["খাবার খাওয়া","পানি পান","বই পড়া","জানালা খোলা"],0,"食べないでください = খাবেন না。"],
+["読解","電車の遅れで、約束の時間に十分遅れます。友達に何と連絡しますか。","১০ মিনিট দেরি হবে—বন্ধুকে কী জানাবে?",["十分遅れます","今着きました","今日は休みです","明日行きます"],0,"十分遅れます = দশ মিনিট দেরি হবে。"],
+["読解","受付で名前を書いてから、番号札を取ってください。最初に何をしますか。","রিসেপশনে প্রথমে কী করতে হবে?",["নাম লেখা","নম্বর টোকেন নেওয়া","বাড়ি ফেরা","ফোন করা"],0,"প্রথমে নাম লিখতে বলা হয়েছে。"],
+["読解","このバスは空港へ行きません。空港へ行くには、次のバスに乗ってください。何をしますか。","এই বাস বিমানবন্দরে যায় না। কী করবে?",["পরের বাসে উঠবে","এখানেই নামবে","ট্যাক্সি নিষেধ","হেঁটে ফিরবে"],0,"次のバスに乗る = পরের বাসে ওঠা。"],
+["読解","日本語教室は火曜日と木曜日の午後六時からです。授業はいつありますか。","জাপানি ক্লাস কখন হয়?",["সোম ও বুধবার","মঙ্গল ও বৃহস্পতিবার সন্ধ্যা ৬টায়","শুধু শুক্রবার","প্রতিদিন সকালে"],1,"火曜日と木曜日 = মঙ্গলবার ও বৃহস্পতিবার。"],
+["読解","申込書は今週の金曜日までに出してください。いつまでに出しますか。","আবেদনপত্র কখনের মধ্যে জমা দিতে হবে?",["আগামী মাসে","এই শুক্রবারের মধ্যে","পরের বছর","আজ রাতেই শুধু"],1,"今週の金曜日まで = এই সপ্তাহের শুক্রবারের মধ্যে。"],
+["読解","雨のため、サッカーの試合は中止になりました。試合はどうなりましたか。","বৃষ্টির কারণে ফুটবল ম্যাচের কী হয়েছে?",["বাতিল হয়েছে","আগে শুরু হয়েছে","জায়গা বদলেছে","জিতেছে"],0,"中止（ちゅうし）= বাতিল/স্থগিত。"]
 ];
 
-/* Example vocabulary */
-const WORDS = [
- {w:"日本",r:"にほん",m:"Japan",k:"N5"},
- {w:"学生",r:"がくせい",m:"student",k:"N5"},
- {w:"先生",r:"せんせい",m:"teacher",k:"N5"},
- {w:"学校",r:"がっこう",m:"school",k:"N5"},
- {w:"友達",r:"ともだち",m:"friend",k:"N5"},
- {w:"時間",r:"じかん",m:"time",k:"N5"},
- {w:"今日",r:"きょう",m:"today",k:"N5"},
- {w:"明日",r:"あした",m:"tomorrow",k:"N5"},
- {w:"食べる",r:"たべる",m:"to eat",k:"N5"},
- {w:"飲む",r:"のむ",m:"to drink",k:"N5"},
- {w:"見る",r:"みる",m:"to see",k:"N5"},
- {w:"読む",r:"よむ",m:"to read",k:"N5"},
- {w:"書く",r:"かく",m:"to write",k:"N5"},
- {w:"聞く",r:"きく",m:"to hear / ask",k:"N5"}
+const SETS=[
+["Mock 01","Daily Life Basics"],["Mock 02","Work & Workplace"],
+["Mock 03","Shopping & Services"],["Mock 04","Travel & Transport"],
+["Mock 05","Health & Appointments"],["Mock 06","Home & Community"],
+["Mock 07","Food & Restaurants"],["Mock 08","Schedules & Time"],
+["Mock 09","Public Notices"],["Mock 10","Mixed Practice A"],
+["Mock 11","Mixed Practice B"],["Mock 12","Listening Focus"],
+["Mock 13","Reading Focus"],["Mock 14","Conversation Focus"],
+["Mock 15","Challenge Mix"]
 ];
 
-const EXAMPLES = {
- "日":[
-  ["今日はいい天気です。","Today the weather is good."],
-  ["日本へ行きたいです。","I want to go to Japan."]
- ],
- "学":[
-  ["毎日日本語を勉強します。","I study Japanese every day."]
- ],
- "食":[
-  ["ご飯を食べます。","I eat a meal."]
- ],
- "人":[
-  ["あの人は先生です。","That person is a teacher."]
- ]
-};
+const $=id=>document.getElementById(id);
+let setIndex=0,qs=[],answers=[],flags=[],at=0,seconds=3600,tick=null,ended=true,lastSet=0;
+const STORE="jft_mock_lab_history_v3";
 
-/* =========================================================
-   STATE
-   ========================================================= */
-
-let state = JSON.parse(localStorage.getItem("kotoba_state") || "{}");
-
-state.studied = state.studied || [];
-state.mastered = state.mastered || [];
-state.reviews = state.reviews || 0;
-state.streak = state.streak || 0;
-state.lastStudy = state.lastStudy || "";
-state.srs = state.srs || {};
-state.favorites = state.favorites || [];
-
-function save(){
-  localStorage.setItem("kotoba_state",JSON.stringify(state));
+function hist(){
+  try{return JSON.parse(localStorage.getItem(STORE)||"[]")}
+  catch(e){return[]}
 }
-
-function markStudy(){
-  const today = new Date().toISOString().slice(0,10);
-
-  if(state.lastStudy !== today){
-    if(state.lastStudy){
-      const previous = new Date(state.lastStudy);
-      const now = new Date(today);
-      const diff = Math.round((now-previous)/86400000);
-
-      if(diff === 1) state.streak++;
-      else if(diff > 1) state.streak = 1;
-    }else{
-      state.streak = 1;
-    }
-
-    state.lastStudy = today;
+function saveHist(a){
+  try{localStorage.setItem(STORE,JSON.stringify(a.slice(0,100)))}
+  catch(e){alert("ইতিহাস সংরক্ষণ করা যায়নি; ব্রাউজারের স্টোরেজ পরীক্ষা করো।")}
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))
+}
+function view(id){
+  ["homeView","testView","resultView"].forEach(x=>$(x).classList.add("hidden"));
+  $(id).classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function shuffle(arr,seed){
+  let a=arr.slice(),x=(seed+1)*7919;
+  for(let i=a.length-1;i>0;i--){
+    x=(x*16807)%2147483647;
+    let j=x%(i+1);
+    [a[i],a[j]]=[a[j],a[i]];
   }
-
-  save();
-  updateStats();
+  return a;
 }
-
-function updateStats(){
-  document.getElementById("streak").textContent=state.streak;
-  document.getElementById("studied").textContent=state.studied.length;
-  document.getElementById("mastered").textContent=state.mastered.length;
-  document.getElementById("reviews").textContent=state.reviews;
+function renderHome(){
+  let h=hist();
+  $("totalTests").textContent=h.length;
+  $("best").textContent=h.length?Math.max(...h.map(x=>x.pct))+"%":"—";
+  $("avg").textContent=h.length?Math.round(h.reduce((s,x)=>s+x.pct,0)/h.length)+"%":"—";
+  $("sets").innerHTML=SETS.map((s,i)=>`
+    <article class="card level" data-set="${i}">
+      <div class="row"><b>${s[0]}</b><span class="tag">50 Q</span></div>
+      <p>${s[1]} · চারটি JFT বিভাগ থেকে মিশ্র প্রশ্ন।</p>
+      <div class="small">⏱ 60 minutes · বাংলা সহায়তা</div>
+      <button class="btn" style="width:100%;margin-top:13px">শুরু করো →</button>
+    </article>`).join("");
+  document.querySelectorAll("[data-set]").forEach(e=>e.onclick=()=>start(+e.dataset.set));
+  $("history").innerHTML=h.length?h.slice(0,10).map(x=>`
+    <div class="history">
+      <div><b>${esc(x.name)}</b><div class="small">${esc(x.date)} · ${x.correct}/50 সঠিক</div></div>
+      <b style="color:var(--p)">${x.pct}%</b>
+    </div>`).join(""):'<div class="small">এখনও পরীক্ষা দেওয়া হয়নি।</div>';
 }
-
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
-
-function showPage(id,button){
-
-  document.querySelectorAll(".page")
-    .forEach(p=>p.classList.remove("active"));
-
-  const page=document.getElementById(id);
-  if(page) page.classList.add("active");
-
-  document.querySelectorAll(".nav-btn")
-    .forEach(b=>b.classList.remove("active"));
-
-  if(button) button.classList.add("active");
-
-  if(id==="kanji") renderKanji();
-  if(id==="review") renderReview();
-  if(id==="progress") renderProgress();
-  if(id==="writing") setupCanvas();
+function start(i){
+  setIndex=i;lastSet=i;
+  let chosen=shuffle(RAW,i*13+17).slice(0,50);
+  qs=chosen.map((r,j)=>{
+    let opts=r[3].map((v,k)=>({v,k}));
+    opts=shuffle(opts,i*37+j*11+3);
+    return {sec:r[0],q:r[1],bn:r[2],opts:opts.map(x=>x.v),ans:opts.findIndex(x=>x.k===r[4]),exp:r[5],audio:r[6]||"",id:j};
+  });
+  answers=Array(50).fill(null);
+  flags=Array(50).fill(false);
+  at=0;seconds=3600;ended=false;
+  $("setName").textContent=SETS[i][0]+" · "+SETS[i][1];
+  view("testView");renderQ();
+  clearInterval(tick);updateTimer();
+  tick=setInterval(()=>{
+    if(ended)return;
+    seconds--;updateTimer();
+    if(seconds<=0)finish(true);
+  },1000);
 }
-
-/* =========================================================
-   LEVELS
-   ========================================================= */
-
-const LEVELS=["N5","N4","N3","N2","N1"];
-
-function renderLevels(){
-
-  const box=document.getElementById("levels");
-
-  box.innerHTML=LEVELS.map(level=>{
-
-    const total=SAMPLE_KANJI.filter(x=>x.l===level).length;
-    const learned=state.mastered.filter(x=>{
-      const k=SAMPLE_KANJI.find(y=>y.k===x);
-      return k && k.l===level;
-    }).length;
-
-    const pct=total ? Math.round(learned/total*100):0;
-
-    return `
-      <div class="card level-card" onclick="filterLevel('${level}');showPage('kanji')">
-        <div class="level">${level}</div>
-        <p>${level==="N5" ? "Beginner Japanese" : "Dataset ready"}</p>
-        <div class="progress"><i style="width:${pct}%"></i></div>
-        <small>${learned}/${total} learned</small>
-      </div>
-    `;
-
-  }).join("");
+function updateTimer(){
+  let m=Math.floor(seconds/60),s=seconds%60;
+  $("timer").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+  $("timer").classList.toggle("warn",seconds<=300);
 }
-
-/* =========================================================
-   KANJI
-   ========================================================= */
-
-let currentFilter="ALL";
-
-function filterLevel(level){
-  currentFilter=level;
-  renderKanji();
-}
-
-function searchKanji(){
-
-  renderKanji(
-    document.getElementById("kanjiSearch").value.trim().toLowerCase()
-  );
-
-}
-
-function renderKanji(query=""){
-
-  const grid=document.getElementById("kanjiGrid");
-
-  let data=SAMPLE_KANJI;
-
-  if(currentFilter!=="ALL"){
-    data=data.filter(x=>x.l===currentFilter);
-  }
-
-  if(query){
-    data=data.filter(x=>
-      x.k.includes(query) ||
-      x.m.toLowerCase().includes(query) ||
-      x.on.toLowerCase().includes(query) ||
-      x.kun.toLowerCase().includes(query)
-    );
-  }
-
-  if(!data.length){
-    grid.innerHTML=`<div class="empty" style="grid-column:1/-1">
-      No result found.
-    </div>`;
-    return;
-  }
-
-  grid.innerHTML=data.map(x=>`
-    <div class="kanji-card" onclick="openKanji('${x.k}')">
-      <div class="kanji-char">${x.k}</div>
-      <div class="kanji-meaning">${x.m}</div>
-      <span class="badge">${x.l}</span>
-    </div>
-  `).join("");
-}
-
-function openKanji(char){
-
-  const k=SAMPLE_KANJI.find(x=>x.k===char);
-
-  if(!k)return;
-
-  const examples=EXAMPLES[char] || [];
-
-  document.getElementById("modalContent").innerHTML=`
-
-    <div class="detail-char">${k.k}</div>
-
-    <div style="text-align:center">
-      <button class="btn primary" onclick="speak('${k.k}')">🔊 Listen</button>
-      <button class="btn outline" onclick="favorite('${k.k}')">
-        ${state.favorites.includes(k.k)?"★ Saved":"☆ Favorite"}
-      </button>
-    </div>
-
-    <h2>${k.m}</h2>
-
-    <div class="info-grid">
-      <div class="info">
-        <small>JLPT</small>
-        <b>${k.l}</b>
-      </div>
-      <div class="info">
-        <small>Stroke count</small>
-        <b>${k.s}</b>
-      </div>
-      <div class="info">
-        <small>On'yomi</small>
-        <b>${k.on || "—"}</b>
-      </div>
-      <div class="info">
-        <small>Kun'yomi</small>
-        <b>${k.kun || "—"}</b>
-      </div>
-    </div>
-
-    <h3>Example sentences</h3>
-
-    ${
-      examples.length
-      ? examples.map(e=>`
-          <div class="example">
-            <b>${e[0]}</b>
-            <br>
-            <span style="color:var(--muted)">${e[1]}</span>
-          </div>
-        `).join("")
-      : `<div class="empty">More examples will appear when the full dataset is connected.</div>`
-    }
-
-  `;
-
-  document.getElementById("modal").classList.add("show");
-}
-
-function hideModal(){
-  document.getElementById("modal").classList.remove("show");
-}
-
-function closeModal(e){
-  if(e.target.id==="modal")hideModal();
-}
-
-function favorite(char){
-
-  if(state.favorites.includes(char)){
-    state.favorites=state.favorites.filter(x=>x!==char);
-  }else{
-    state.favorites.push(char);
-  }
-
-  save();
-  openKanji(char);
-  toast("Favorites updated");
-}
-
-/* =========================================================
-   SPEECH
-   ========================================================= */
-
-function speak(text){
-
-  if(!("speechSynthesis" in window)){
-    toast("Speech is not supported");
-    return;
-  }
-
-  speechSynthesis.cancel();
-
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang="ja-JP";
-  u.rate=.8;
-
-  speechSynthesis.speak(u);
-}
-
-/* =========================================================
-   REVIEW / SRS
-   ========================================================= */
-
-let reviewIndex=0;
-
-function renderReview(){
-
-  const cards=SAMPLE_KANJI;
-
-  if(!cards.length)return;
-
-  if(reviewIndex>=cards.length)reviewIndex=0;
-
-  const k=cards[reviewIndex];
-
-  document.getElementById("reviewCount").textContent=
-    `${reviewIndex+1} / ${cards.length}`;
-
-  document.getElementById("flashcard").innerHTML=`
-    <div class="flash-kanji">${k.k}</div>
-    <div class="flash-reading">${k.on}</div>
-    <div class="flash-meaning">${k.m}</div>
-
-    <button class="btn outline" style="margin-top:20px"
-      onclick="speak('${k.k}')">🔊 Japanese Audio</button>
-  `;
-}
-
-function rateCard(rating){
-
-  const k=SAMPLE_KANJI[reviewIndex];
-
-  if(!k)return;
-
-  state.reviews++;
-
-  if(!state.studied.includes(k.k)){
-    state.studied.push(k.k);
-  }
-
-  state.srs[k.k]={
-    rating,
-    lastReviewed:Date.now()
+function renderQ(){
+  let q=qs[at];
+  $("section").textContent=q.sec;
+  $("counter").textContent=`প্রশ্ন ${at+1} / 50`;
+  $("q").textContent=q.q;
+  $("bn").textContent=q.bn;
+  $("options").innerHTML=q.opts.map((x,j)=>`
+    <button class="opt ${answers[at]===j?"sel":""}" data-opt="${j}">
+      <span class="letter">${"ABCD"[j]}</span><span>${esc(x)}</span>
+    </button>`).join("");
+  document.querySelectorAll("[data-opt]").forEach(b=>b.onclick=()=>{
+    answers[at]=+b.dataset.opt;renderQ();
+  });
+  $("audioArea").innerHTML=q.sec==="聴解"?`
+    <button class="btn alt" id="playAudio">🔊 জাপানি অডিও শুনো</button>
+    <span class="note">ডিভাইসের Japanese voice</span>`:"";
+  if(q.sec==="聴解")$("playAudio").onclick=()=>{
+    if(!q.audio){alert("এই প্রশ্নে অডিও স্ক্রিপ্ট নেই; পরের প্রশ্নে যাও।");return}
+    if(!("speechSynthesis"in window)){alert("এই ব্রাউজারে speech playback নেই।");return}
+    speechSynthesis.cancel();
+    let u=new SpeechSynthesisUtterance(q.audio);
+    u.lang="ja-JP";u.rate=.82;speechSynthesis.speak(u);
   };
-
-  if(rating==="good" || rating==="easy"){
-    if(!state.mastered.includes(k.k)){
-      state.mastered.push(k.k);
-    }
-  }
-
-  markStudy();
-
-  reviewIndex++;
-
-  if(reviewIndex>=SAMPLE_KANJI.length){
-    reviewIndex=0;
-    toast("Review cycle complete 🎉");
-  }
-
-  renderReview();
-  renderLevels();
+  $("prevBtn").disabled=at===0;
+  $("nextBtn").textContent=at===49?"শেষ প্রশ্ন":"পরের →";
+  $("flagBtn").textContent=flags[at]?"★ মার্ক করা":"☆ মার্ক";
+  $("bar").style.width=(answers.filter(x=>x!==null).length/50*100)+"%";
+  $("answered").textContent=`উত্তর ${answers.filter(x=>x!==null).length}/50 · মার্ক ${flags.filter(Boolean).length}`;
+  $("qgrid").innerHTML=qs.map((x,j)=>`
+    <button class="qnum ${answers[j]!==null?"ans":""} ${j===at?"cur":""} ${flags[j]?"flag":""}" data-jump="${j}">${j+1}</button>`).join("");
+  document.querySelectorAll("[data-jump]").forEach(b=>b.onclick=()=>{
+    at=+b.dataset.jump;renderQ();
+  });
 }
-
-/* =========================================================
-   WRITING
-   ========================================================= */
-
-let canvas,ctx,drawing=false;
-let writingIndex=0;
-
-function setupCanvas(){
-
-  canvas=document.getElementById("canvas");
-  if(!canvas)return;
-
-  const ratio=window.devicePixelRatio || 1;
-
-  const rect=canvas.getBoundingClientRect();
-
-  canvas.width=rect.width*ratio;
-  canvas.height=320*ratio;
-
-  ctx=canvas.getContext("2d");
-
-  ctx.scale(ratio,ratio);
-
-  ctx.lineWidth=4;
-  ctx.lineCap="round";
-  ctx.lineJoin="round";
-
-  canvas.onpointerdown=e=>{
-    drawing=true;
-    ctx.beginPath();
-    const p=pointer(e);
-    ctx.moveTo(p.x,p.y);
-  };
-
-  canvas.onpointermove=e=>{
-    if(!drawing)return;
-    const p=pointer(e);
-    ctx.lineTo(p.x,p.y);
-    ctx.stroke();
-  };
-
-  canvas.onpointerup=()=>{
-    drawing=false;
-  };
-
-  canvas.onpointerleave=()=>{
-    drawing=false;
-  };
+function finish(auto=false){
+  if(ended)return;
+  if(!auto&&!confirm("পরীক্ষা জমা দেবে? উত্তর না দেওয়া প্রশ্নও জমা হবে।"))return;
+  ended=true;clearInterval(tick);
+  if("speechSynthesis"in window)speechSynthesis.cancel();
+  let correct=answers.reduce((n,a,i)=>n+(a===qs[i].ans?1:0),0);
+  let wrong=answers.reduce((n,a,i)=>n+(a!==null&&a!==qs[i].ans?1:0),0);
+  let blank=answers.filter(a=>a===null).length;
+  let pct=Math.round(correct/50*100);
+  let rec={name:SETS[setIndex][0],date:new Date().toLocaleString("bn-BD"),pct,correct,wrong,blank};
+  let h=hist();h.unshift(rec);saveHist(h);
+  $("score").textContent=pct+"%";
+  $("message").textContent=auto?"সময় শেষ—পরীক্ষা জমা হয়েছে।":pct>=80?"দারুণ! 頑張りました！":pct>=50?"ভালো চেষ্টা—রিভিউ করে আবার দাও।":"চর্চা চালিয়ে যাও！もう一度挑戦しよう！";
+  $("rightCount").textContent="সঠিক: "+correct;
+  $("wrongCount").textContent="ভুল: "+wrong;
+  $("blankCount").textContent="ফাঁকা: "+blank;
+  $("review").innerHTML=qs.map((q,i)=>`
+    <article class="review">
+      <b>${i+1}. ${esc(q.q)}</b>
+      <div class="small">${esc(q.sec)} · ${esc(q.bn)}</div>
+      <div class="${answers[i]===q.ans?"good":"bad"}">${answers[i]===q.ans?"✓ সঠিক":"✗ "+(answers[i]===null?"উত্তর দেওয়া হয়নি":"তোমার উত্তর: "+esc(q.opts[answers[i]]))}</div>
+      <div class="small" style="margin-top:7px">সঠিক উত্তর: <b>${esc(q.opts[q.ans])}</b><br>ব্যাখ্যা: ${esc(q.exp)}</div>
+    </article>`).join("");
+  renderHome();view("resultView");
 }
-
-function pointer(e){
-
-  const r=canvas.getBoundingClientRect();
-
-  return {
-    x:e.clientX-r.left,
-    y:e.clientY-r.top
-  };
+function goHome(){
+  if(!ended&&!$("testView").classList.contains("hidden")&&!confirm("পরীক্ষা ছেড়ে হোমে ফিরবে? অগ্রগতি সংরক্ষণ হবে না।"))return;
+  ended=true;clearInterval(tick);
+  if("speechSynthesis"in window)speechSynthesis.cancel();
+  renderHome();view("homeView");
 }
-
-function clearCanvas(){
-
-  if(!ctx)return;
-
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-}
-
-function showGuide(){
-
-  if(!ctx)return;
-
-  clearCanvas();
-
-  const char=SAMPLE_KANJI[writingIndex].k;
-
-  ctx.save();
-
-  ctx.globalAlpha=.12;
-  ctx.font="230px 'Noto Serif JP', serif";
-  ctx.textAlign="center";
-  ctx.textBaseline="middle";
-  ctx.fillText(char,canvas.clientWidth/2,160);
-
-  ctx.restore();
-}
-
-function nextWriting(){
-
-  writingIndex++;
-
-  if(writingIndex>=SAMPLE_KANJI.length){
-    writingIndex=0;
-  }
-
-  document.getElementById("writingChar").textContent=
-    SAMPLE_KANJI[writingIndex].k;
-
-  clearCanvas();
-}
-
-function speakWriting(){
-
-  speak(SAMPLE_KANJI[writingIndex].k);
-}
-
-/* =========================================================
-   PROGRESS
-   ========================================================= */
-
-function renderProgress(){
-
-  const total=SAMPLE_KANJI.length;
-  const learned=state.mastered.length;
-
-  const pct=total
-    ? Math.round(learned/total*100)
-    : 0;
-
-  document.getElementById("overallBar").style.width=pct+"%";
-  document.getElementById("overallText").textContent=
-    `${learned} of ${total} sample kanji mastered (${pct}%)`;
-
-  document.getElementById("progressLevels").innerHTML=
-    LEVELS.map(level=>{
-
-      const totalLevel=SAMPLE_KANJI.filter(x=>x.l===level).length;
-
-      const learnedLevel=state.mastered.filter(x=>{
-        const k=SAMPLE_KANJI.find(y=>y.k===x);
-        return k && k.l===level;
-      }).length;
-
-      const p=totalLevel
-        ? Math.round(learnedLevel/totalLevel*100)
-        : 0;
-
-      return `
-        <div class="card" style="margin-bottom:10px">
-          <div style="display:flex;justify-content:space-between">
-            <b>${level}</b>
-            <span>${learnedLevel}/${totalLevel}</span>
-          </div>
-          <div class="progress">
-            <i style="width:${p}%"></i>
-          </div>
-        </div>
-      `;
-
-    }).join("");
-}
-
-/* =========================================================
-   DARK MODE
-   ========================================================= */
-
-function toggleDark(){
-
+$("prevBtn").onclick=()=>{if(at>0){at--;renderQ()}};
+$("nextBtn").onclick=()=>{if(at<49){at++;renderQ()}else alert("এটি শেষ প্রশ্ন। জমা দিতে পারো।")};
+$("flagBtn").onclick=()=>{flags[at]=!flags[at];renderQ()};
+$("submitBtn").onclick=()=>finish(false);
+$("homeBtn").onclick=goHome;
+$("exitBtn").onclick=goHome;
+$("resultHomeBtn").onclick=()=>{renderHome();view("homeView")};
+$("againBtn").onclick=()=>start(lastSet);
+$("showReviewBtn").onclick=()=>$("reviewTitle").scrollIntoView({behavior:"smooth"});
+$("themeBtn").onclick=()=>{
   document.body.classList.toggle("dark");
-
-  localStorage.setItem(
-    "kotoba_dark",
-    document.body.classList.contains("dark")
-  );
-}
-
-if(localStorage.getItem("kotoba_dark")==="true"){
-  document.body.classList.add("dark");
-}
-
-/* =========================================================
-   RESET
-   ========================================================= */
-
-function resetProgress(){
-
-  if(!confirm("Reset all Kotoba progress?"))return;
-
-  localStorage.removeItem("kotoba_state");
-
-  location.reload();
-}
-
-/* =========================================================
-   TOAST
-   ========================================================= */
-
-let toastTimer;
-
-function toast(message){
-
-  const el=document.getElementById("toast");
-
-  el.textContent=message;
-  el.classList.add("show");
-
-  clearTimeout(toastTimer);
-
-  toastTimer=setTimeout(()=>{
-    el.classList.remove("show");
-  },1800);
-}
-
-/* =========================================================
-   INITIALIZE
-   ========================================================= */
-
-updateStats();
-renderLevels();
-renderKanji();
-
+  let t=document.body.classList.contains("dark")?"dark":"light";
+  $("themeBtn").textContent=t==="dark"?"☀":"☾";
+  try{localStorage.setItem("jft_theme",t)}catch(e){}
+};
+try{
+  if(localStorage.getItem("jft_theme")==="dark"){
+    document.body.classList.add("dark");$("themeBtn").textContent="☀";
+  }
+}catch(e){}
+renderHome();
 </script>
-
 </body>
 </html>
